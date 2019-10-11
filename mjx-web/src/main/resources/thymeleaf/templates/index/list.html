@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<html lang="en">
+
+<head th:replace="common/header::common_header(~{::title},~{::link})" >
+    <title>[[${seo_title}]]</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/goods-class.css}">
+</head>
+<div th:include="common/common-js::common-js" th:remove="tag"></div>
+<body>
+<div class="goods-class">
+    <!-- 头部 -->
+    <header class="goods-class-title">
+        <div class="goods-class-title-left">
+            <i class="hc-icon icon-app-left"></i>
+        </div>
+        <div class="goods-class-title-middle">
+            <i class="hc-icon icon-search"></i>
+
+            <form id="filtersearch" action="/index/list.html">
+                <input maxlength="20" placeholder="输入商品名称、品牌关键词查找" class="goods-class-input J-keywords" type="text" th:value="${keyword}"value="">
+                <input class="categoryVal" type="hidden" name="category" value="" />
+                <input class="categoryName" type="hidden" name="category_name" value="" />
+                <input class="brandVal" type="hidden" name="brand" value="" />
+                <input class="brandName" type="hidden" name="brand_name" value="" />
+                <input class="filterCategory" type="hidden" name="filter_category" value="" />
+                <input class="filterBrands" type="hidden" name="filter_brands" value="" />
+            </form>
+
+            <div class="i-error2">
+                <i class="hc-icon icon-error2"></i>
+            </div>
+        </div>
+        <div class="goods-class-title-right">
+            <i class="hc-icon icon-filter"></i>
+        </div>
+        <input class="J-totalcount" type="hidden" name="count" value="" />
+    </header>
+    <!-- 内容 -->
+    <div class="goods-class-body">
+        <!-- 一种商品 -->
+        <div class="goods-class-one-kind" th:each="sku:${list}" th:if="${not #lists.isEmpty(list)}">
+            <div class="goods-class-one-kind-pic">
+                <img src="/images/u116.jpg" alt="">
+            </div>
+            <div class="goods-class-one-kind-desc" >
+                <div class="goods-class-one-kind-desc-title">
+                        <span class="word">
+                            <!-- <span class="new">新品</span>
+                            <span class="hot">热销</span> -->
+                            <!--[[${sku.skuInfo.skuName}]]-->
+                        </span>
+                </div>
+
+                <div class="new-img" th:if="${sku.newFlag}">
+                    <img src="/images/new.png" alt="">
+                </div>
+                <div class="hot-img">
+                    <img src="/images/hot.png" alt="" th:if="${sku.hotFlag}">
+                </div>
+                <div class="seven-img">
+                    <img src="/images/sevenNoReason.png" alt="" th:if="${sku.sevenFlag}">
+                </div>
+                <div class="goods-class-one-kind-desc-type">
+                    [[${sku.skuInfo.modelSpecShow}]]
+                </div>
+                <div class="goods-class-one-kind-desc-order">
+                    订货号：[[${sku.skuInfo.skuNo}]]
+                </div>
+                <div class="goods-class-one-kind-desc-price">
+                    <span class="left">市场价：</span>
+                    <span class="right">
+                            ￥<span class="right-int">*</span>.00
+                        </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 右侧蒙层弹框 筛选 -->
+    <div class="goods-class-choice-wrapper">
+        <div class="goods-class-left"></div>
+        <div class="goods-class-choice">
+            <!-- 分类 -->
+            <div class="goods-class-choice-type">
+                <div class="goods-class-choice-type-title">
+                    <div class="goods-class-choice-type-title-left">
+                        分类
+                    </div>
+                    <div class="goods-class-choice-type-title-right">
+                        <span class="type-selected"></span>
+                        <div class="i-up">
+                            <i class="hc-icon icon-up"></i>
+                        </div>
+                        <div class="i-down">
+                            <i class="hc-icon icon-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="goods-class-choice-type-body">
+                    <div class="goods-type goods-type0" th:attr="cate_id='#{a}'">
+                        创面敷料
+                    </div>
+                    <div class="goods-type goods-type1"th:remove="all">
+                        防护隔离用品
+                    </div>
+                    <div class="goods-type goods-type2"th:remove="all">
+                        护理敷料
+                    </div>
+                    <div class="goods-type goods-type3" th:remove="all">
+                        消毒耗材
+                    </div>
+                    <div class="goods-type goods-type4" th:remove="all">
+                        手术敷料
+                    </div>
+                    <div class="goods-type goods-type5" th:remove="all">
+                        输注耗材
+                    </div>
+                    <div class="goods-type goods-type6" th:remove="all">
+                        防护隔离用品耗材
+                    </div>
+                    <div class="goods-type goods-type7" th:remove="all">
+                        手术敷料222
+                    </div>
+                    <div class="goods-type goods-type8" th:remove="all">
+                        输注耗材222
+                    </div>
+                </div>
+            </div>
+            <!-- 品牌 -->
+            <div class="goods-class-choice-brand">
+                <div class="goods-class-choice-brand-title">
+                    <div class="goods-class-choice-brand-title-left">
+                        品牌
+                    </div>
+                    <div class="goods-class-choice-brand-title-right">
+                        <span class="brand-selected"></span>
+                        <div class="i-up">
+                            <i class="hc-icon icon-up"></i>
+                        </div>
+                        <div class="i-down">
+                            <i class="hc-icon icon-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="goods-class-choice-brand-body">
+                    <div class="goods-brand " th:each="brand:${brandList}" th:attr="brandid='#{brand.brandId}'"  >
+                        <!--[[${brand.brandName}]]-->
+                    </div>
+                    <div class="goods-brand goods-brand1" th:remove="all">
+                        防护隔离用品
+                    </div>
+                    <div class="goods-brand goods-brand2" th:remove="all">
+                        护理敷料
+                    </div>
+                    <div class="goods-brand goods-brand3" th:remove="all">
+                        消毒耗材
+                    </div>
+                    <div class="goods-brand goods-brand4" th:remove="all">
+                        手术敷料
+                    </div>
+                    <div class="goods-brand goods-brand5" th:remove="all">
+                        输注耗材
+                    </div>
+                    <div class="goods-brand goods-brand6" th:remove="all">
+                        防护隔离用品耗材
+                    </div>
+                    <div class="goods-brand goods-brand7" th:remove="all">
+                        手术敷料222
+                    </div>
+                    <div class="goods-brand goods-brand8" th:remove="all">
+                        输注耗材222
+                    </div>
+                </div>
+            </div>
+            <!-- 底部 按钮 -->
+            <div class="goods-class-bottom">
+                <div class="goods-class-reset">
+                    重置
+                </div>
+                <div class="goods-class-confirm">
+                    确定
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 未查找到符合条件的商品 -->
+    <div class="goods-class-none" th:if="${#lists.isEmpty(list)}">
+        <div class="i-info2">
+            <i class="hc-icon icon-info2"></i>
+        </div>
+        <div class="goods-class-none-word">
+            未查找到符合条件的商品
+        </div>
+        <div class="back-index">
+            回到首页
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/js/pages/goods-class.js}"></script>
+<script>
+    function toSearch(obj){
+        let kw = $(obj).val().trim();
+        window.location.href="/index/search.html?keywords=" + encodeURIComponent(kw);
+    }
+
+    function phone(date){
+        window.location.href = 'tel:' + date;
+    }
+</script>
+</html>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>

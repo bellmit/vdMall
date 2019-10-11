@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <title>贝登精选-医疗器械B2B电商平台</title>
+    <link rel="stylesheet" th:href="'/css/common/base.css?' +  ${staticTimeStamp}" href="../../../static/css/common/base.css">
+    <link rel="stylesheet" th:href="'/css/search.css?' + ${staticTimeStamp}" href="../../../static/css/search.css" >
+</head>
+<div th:include="common/common-js::common-js" th:remove="tag"></div>
+<body>
+    <div class="search">
+        <header class="search-header-wrapper">
+            <div class="search-header-left">
+                <form class="form-search" action="javascript:;" onsubmit="searchList">
+                    <input class="search-input J-search"  placeholder="输入商品名称、品牌查找" type="search"
+                           th:value="${keywords}"
+                           maxlength="20">
+                </form>
+                <div class="i-error2">
+                    <i class="hc-icon icon-error2"></i>
+                </div>
+                <div class="i-search">
+                    <i class="hc-icon icon-search J-search-key"></i>
+                </div>
+            </div>
+            <div class="search-header-right">
+                <a href="javascript:history.back(-1)" class="search-cancle" style="color:#666666">取消</a>
+            </div>
+        </header>
+        <div class="search-recommend-wrapper" style="display: block">
+            <div class="history">
+                <h3 class="history_title">历史搜索<i class="hc-icon icon-recycle cleanHistory"></i></h3>
+                <ul class="history_keys" id="history_keys">
+                    <!-- <li>钱璟康复迈瑞Mindray 全自动三分类dasdas迈瑞Mindray 全自动三分类dasdas</li>
+                    <li>Panasonic松下</li>
+                    <li>安科ANKE</li>
+                    <li>奥特光学</li>
+                    <li>铅胶围领</li>
+                    <li>MVE</li>
+                    <li> 三分类血球仪</li>
+                    <li>体重秤</li>
+                    <li>喉镜配件</li> -->
+                </ul>
+            </div>
+            <div class="search-recommend-title">
+                关键词推荐
+            </div>
+            <div class="search-recommend-body">
+                <span class="search-recommend-name">黑白超</span>
+                <span class="search-recommend-name">心电图机</span>
+                <span class="search-recommend-name">监护仪</span>
+                <span class="search-recommend-name">血液细胞分析仪</span>
+                <span class="search-recommend-name">麻醉机</span>
+                <span class="search-recommend-name">灭菌器</span>
+                <span class="search-recommend-name">移液器</span>
+            </div>
+        </div>
+        <!-- 搜索匹配 -->
+        <!-- <div class="search_matching" id="search_matching">
+            <ul class="search_matchingBox">
+                <li><a href="javaScript:;">迈瑞Mindray <span>45646</span> 全自动三分类血液分析仪BC-1900 sdfdsf</a><i
+                        class="hc-icon icon-right"></i></li>
+                <li><a href="javaScript:;"> 迈瑞Mindray 全自动三分类dasdas</a> <i class="hc-icon icon-right"></i></li>
+                <li><a href="javaScript:;"> 迈瑞Mindray 全自动三分类 </a><i class="hc-icon icon-right"></i></li>
+                <li><a href="javaScript:;">迈瑞Mindray 全自动三分类dasdas</a> <i class="hc-icon icon-right"></i></li>
+                <li><a href="javaScript:;"> 迈瑞Mindray 全自动三分类dadas </a><i class="hc-icon icon-right"></i></li>
+                <li><a href="javaScript:;">迈瑞Mindray 全自动三分类 </a> <i class="hc-icon icon-right"></i></li>
+            </ul>
+        </div> -->
+        <div></div>
+    </div>
+    <!-- 错误气泡提示 数量已达到上限 -->
+    <div class="toast">
+        <div class="error-bubble J-error-bubble">
+            请输入有效内容
+        </div>
+    </div>
+
+</body>
+<foot th:remove="tag" ></foot>
+<script  th:src="'/js/common/fastclick.js?' + ${staticTimeStamp}" src="../../../static/js/common/fastclick.js"></script>
+<script  th:src="'/js/common/zepto.min.js?'+  ${staticTimeStamp}" src="../../../static/js/common/zepto.min.js"></script>
+<script th:src="'/js/common/touch.js?' +  ${staticTimeStamp}" src="../../../static/js/common/touch.js"></script>
+<script th:src="'/js/common/fx_methods.js?' +  ${staticTimeStamp}" src="../../../static/js/common/fx_methods.js"></script>
+<script th:src="'/js/common/fx.js?'+  ${staticTimeStamp}" src="../../../static/js/common/fx.js"></script>
+<script th:src="'/js/pages/search.js?' + ${staticTimeStamp}" src="../../../static/js/pages/search.js"></script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</html>
+

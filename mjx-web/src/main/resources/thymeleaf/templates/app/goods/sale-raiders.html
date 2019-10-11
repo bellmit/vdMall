@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no" />
+    <!--	Common	styles	and	scripts	-->
+    <link rel="stylesheet" type="text/css" th:href="'/apibus/css/common/base.css?' +  ${staticTimeStamp}">
+    <link rel="stylesheet" th:href="'/apibus/css/sale-raiders.css?' +  ${staticTimeStamp}">
+    <!--<link rel="icon" th:href="@{/images/favicon.ico}">-->
+    <script th:src="'/apibus/js/common/zepto.min.js?' + ${staticTimeStamp}"></script>
+    <script th:src="'/apibus/js/common/touch.js?'+  ${staticTimeStamp}"></script>
+    <script th:src="'/apibus/js/common/fx.js?' + ${staticTimeStamp}"></script>
+    <script th:src="'/apibus/js/common/fx_methods.js?' + ${staticTimeStamp}"></script>
+    <script th:src="'/apibus/js/common/bannerTouch.js?'+ ${staticTimeStamp}"></script>
+</head>
+<div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        var _contextUrl = [[${contextUrl}]];
+        var _appId = [[${appId}]];
+        var _accountStatus = [[${accountStatus}]];
+        var _openId = [[${openId}]];
+        /*]]>*/
+        var variablPath = document.createElement('variablPath');
+        variablPath.setAttribute('src', _contextUrl);
+        variablPath.setAttribute('appId', _appId);
+        variablPath.setAttribute('openId', _openId);
+        variablPath.setAttribute('accountStatus', _accountStatus);
+        document.head.appendChild(variablPath);
+    </script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+    <script th:src="${contextUrl}+'/js/common/BrowserShare.js?' + ${staticTimeStamp} "></script>
+    <script th:src="${contextUrl}+'/js/common/weixinGetCode.js?' + ${staticTimeStamp} "  th:if="${forceWxRedirect}"></script>
+    <input type="hidden" id="domain" name="domain" th:value="${contextUrl}">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</div>
+<body>
+    <div class="sale-raiders-wrapper" style="padding-top: 0px;">
+        <!--<header class="sale-raiders-header">-->
+            <!--<div class="header-back">-->
+                <!--<i class="hc-icon icon-app-left"></i>-->
+            <!--</div>-->
+            <!--销售攻略-->
+        <!--</header>-->
+        <section class="sale-raiders-detail">
+            <div class="one-detail" th:if="${(goodsEntity.opInstitution != null &&
+            '' != goodsEntity.opInstitution)|| (goodsEntity.isOpShows == '1' && department != null && department.size()>0) }">
+                <div class="detail-header">应用场景</div>
+                <div class="detail-body">
+                    <div class="app-department" th:if="${goodsEntity.isOpShows == '1' && department != null && department.size()>0}">
+                        <span class="app-department-left">适用科室：</span>
+                        <span class="app-department-desc" th:each="entitys,itm:${department}">
+                            <span th:text="${entitys.departmentName}">
+                            </span>
+                        </span>
+                    </div>
+                    <div class="app-mechanism" th:if="${goodsEntity.opInstitution != null && '' != goodsEntity.opInstitution }">
+                        <span class="app-mechanism-left">适用机构：</span>
+                        <span class="app-mechanism-desc" th:utext="${goodsEntity.opInstitution}">检验科；</span>
+                    </div>
+                </div>
+            </div>
+            <div class="one-detail" th:if="${goodsEntity.opSalespoint != null && '' != goodsEntity.opSalespoint}">
+                <div class="detail-header">商品卖点</div>
+                <div class="detail-body">
+                    <div th:utext="${goodsEntity.opSalespoint}">
+                    </div>
+                </div>
+            </div>
+            <div class="one-detail" th:if="${goodsEntity.opCompete != null && '' != goodsEntity.opCompete}">
+                <div class="detail-header">竞品对比</div>
+                <div class="detail-body" th:utext="${goodsEntity.opCompete}">
+
+                </div>
+            </div>
+            <div class="one-detail" th:if="${goodsEntity.opGoodsData != null && '' != goodsEntity.opGoodsData}">
+                <div class="detail-header">商品资料</div>
+                <div class="detail-body">
+                    <div th:utext="${goodsEntity.opGoodsData}">
+                    </div>
+                </div>
+            </div>
+            <div class="one-detail" th:if="${goodsEntity.picList != null && goodsEntity.picList.size()>0}">
+                <div class="detail-header">商品彩页</div>
+                <div class="detail-body">
+                    <ul>
+                        <li th:each="entity,item:${goodsEntity.picList}">
+                            <img th:src="${entity}" alt="遍历图">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="fixed-img-fullpage"></div>
+</body>
+<script th:src="'/apibus/js/common/zepto.min.js?' + ${staticTimeStamp}"></script>
+<script th:src="'/apibus/js/pages/sale-raiders.js?' + ${staticTimeStamp}"></script>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+</html>

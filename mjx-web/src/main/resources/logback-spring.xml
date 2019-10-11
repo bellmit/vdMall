@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration>
+
+    <appender name="FileAppend" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/app/logs/mjx/mjx.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>/app/logs/mjx/history/mjx-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+            <maxFileSize>100MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d %p [%t] [mjx] [106] %c %file:%line - %m%n</pattern>
+            <charset>utf-8</charset>
+        </encoder>
+    </appender>
+    <appender name="FilterAppend" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/app/logs/mjx/mjx-filter.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>/app/logs/mjx/history/mjx-filter-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+            <maxFileSize>100MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d %p [%t] [mjx] [106] %c %file:%line - %m%n</pattern>
+            <charset>utf-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                %d %p [%t] [mjx] %c %file:%line - %m%n
+            </pattern>
+        </layout>
+    </appender>
+    <appender name="ASYNC_FilterAppend" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FilterAppend"/>
+    </appender>
+    <appender name="ASYNC_FileAppend" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FileAppend"/>
+    </appender>
+
+    <root level="info" additivity="false">
+        <appender-ref ref="ASYNC_FileAppend" />
+        <appender-ref ref="consoleLog" />
+    </root>
+    <logger name="login" level="info" additivity="false">
+        <appender-ref ref="ASYNC_FilterAppend" />
+        <appender-ref ref="consoleLog" />
+    </logger>
+
+</configuration>

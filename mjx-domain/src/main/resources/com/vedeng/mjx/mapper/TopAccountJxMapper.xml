@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.vedeng.mjx.mapper.TopAccountJxMapper" >
+  <resultMap id="BaseResultMap" type="com.vedeng.mjx.domain.TopAccountJx" >
+    <!--          -->
+    <id column="ACCOUNT_ID" property="accountId" jdbcType="INTEGER" />
+    <result column="ACCOUNT" property="account" jdbcType="VARCHAR" />
+    <result column="COMPANY_NAME" property="companyName" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="NICKNAME" property="nickname" jdbcType="VARCHAR" />
+    <result column="PAY_PASSWORD" property="payPassword" jdbcType="VARCHAR" />
+    <result column="EXPERIENCE" property="experience" jdbcType="INTEGER" />
+    <result column="IS_OPEN_STORE" property="isOpenStore" jdbcType="BIT" />
+    <result column="STATUS" property="status" jdbcType="BIT" />
+    <result column="ACCOUNT_TYPE_ID" property="accountTypeId" jdbcType="INTEGER" />
+    <result column="COMPANY_STATUS" property="companyStatus" jdbcType="BIT" />
+    <result column="INDENTITY_STATUS" property="indentityStatus" jdbcType="BIT" />
+    <result column="ADD_TIME" property="addTime" jdbcType="BIGINT" />
+    <result column="CREATOR" property="creator" jdbcType="INTEGER" />
+    <result column="MOD_TIME" property="modTime" jdbcType="BIGINT" />
+    <result column="UPDATER" property="updater" jdbcType="INTEGER" />
+    <result column="SSO_ACCOUNT_ID" property="ssoAccountId" jdbcType="INTEGER" />
+    <result column="UUID" property="uuid" jdbcType="VARCHAR" />
+    <result column="WEIXIN_OPENID" property="weixinOpenid" jdbcType="VARCHAR" />
+    <result column="LAST_LOGIN_TIME" property="lastLoginTime" jdbcType="BIGINT" />
+    <result column="EMPLOYEE_ID" property="employeeId" jdbcType="INTEGER" />
+    <result column="FROM" property="from" jdbcType="BIT" />
+    <result column="SYNC_STATUS" property="syncStatus" jdbcType="BIT" />
+    <result column="CONTACT" property="contact" jdbcType="VARCHAR" />
+    <result column="INVITE_CODE" property="inviteCode" jdbcType="VARCHAR" />
+    <result column="AVATAR_DOMAIN" property="avatarDomain" jdbcType="VARCHAR" />
+    <result column="AVATAR_URI" property="avatarUri" jdbcType="VARCHAR" />
+    <result column="ACCOUNT_FROM" property="accountFrom" jdbcType="BIT" />
+    <result column="ACCOUNT_TYPE" property="accountType" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--          -->
+    ACCOUNT_ID, ACCOUNT, COMPANY_NAME, EMAIL, MOBILE, NICKNAME, PAY_PASSWORD, EXPERIENCE, 
+    IS_OPEN_STORE, STATUS, ACCOUNT_TYPE_ID, COMPANY_STATUS, INDENTITY_STATUS, ADD_TIME, 
+    CREATOR, MOD_TIME, UPDATER, SSO_ACCOUNT_ID, UUID, WEIXIN_OPENID, LAST_LOGIN_TIME, 
+    EMPLOYEE_ID, `FROM`, SYNC_STATUS, CONTACT, INVITE_CODE, AVATAR_DOMAIN, AVATAR_URI,
+    ACCOUNT_FROM, ACCOUNT_TYPE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    <!--          -->
+    select 
+    <include refid="Base_Column_List" />
+    from T_OP_ACCOUNT
+    where ACCOUNT_ID = #{accountId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <!--          -->
+    delete from T_OP_ACCOUNT
+    where ACCOUNT_ID = #{accountId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.vedeng.mjx.domain.TopAccountJx" >
+    <!--          -->
+    insert into T_OP_ACCOUNT (ACCOUNT_ID, ACCOUNT, COMPANY_NAME, 
+      EMAIL, MOBILE, NICKNAME, 
+      PAY_PASSWORD, EXPERIENCE, IS_OPEN_STORE, 
+      STATUS, ACCOUNT_TYPE_ID, COMPANY_STATUS, 
+      INDENTITY_STATUS, ADD_TIME, CREATOR, 
+      MOD_TIME, UPDATER, SSO_ACCOUNT_ID, 
+      UUID, WEIXIN_OPENID, LAST_LOGIN_TIME, 
+      EMPLOYEE_ID, `FROM`, SYNC_STATUS,
+      CONTACT, INVITE_CODE, AVATAR_DOMAIN, 
+      AVATAR_URI, ACCOUNT_FROM, ACCOUNT_TYPE
+      )
+    values (#{accountId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
+      #{payPassword,jdbcType=VARCHAR}, #{experience,jdbcType=INTEGER}, #{isOpenStore,jdbcType=BIT}, 
+      #{status,jdbcType=BIT}, #{accountTypeId,jdbcType=INTEGER}, #{companyStatus,jdbcType=BIT}, 
+      #{indentityStatus,jdbcType=BIT}, #{addTime,jdbcType=BIGINT}, #{creator,jdbcType=INTEGER}, 
+      #{modTime,jdbcType=BIGINT}, #{updater,jdbcType=INTEGER}, #{ssoAccountId,jdbcType=INTEGER}, 
+      #{uuid,jdbcType=VARCHAR}, #{weixinOpenid,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=BIGINT}, 
+      #{employeeId,jdbcType=INTEGER}, #{from,jdbcType=BIT}, #{syncStatus,jdbcType=BIT}, 
+      #{contact,jdbcType=VARCHAR}, #{inviteCode,jdbcType=VARCHAR}, #{avatarDomain,jdbcType=VARCHAR}, 
+      #{avatarUri,jdbcType=VARCHAR}, #{accountFrom,jdbcType=BIT}, #{accountType,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.vedeng.mjx.domain.TopAccountJx" >
+    <!--          -->
+    <selectKey keyProperty="accountId" resultType="int" order="AFTER">
+      select LAST_INSERT_ID()
+    </selectKey>
+    insert into T_OP_ACCOUNT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="accountId != null" >
+        ACCOUNT_ID,
+      </if>
+      <if test="account != null" >
+        ACCOUNT,
+      </if>
+      <if test="companyName != null" >
+        COMPANY_NAME,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="mobile != null" >
+        MOBILE,
+      </if>
+      <if test="nickname != null" >
+        NICKNAME,
+      </if>
+      <if test="payPassword != null" >
+        PAY_PASSWORD,
+      </if>
+      <if test="experience != null" >
+        EXPERIENCE,
+      </if>
+      <if test="isOpenStore != null" >
+        IS_OPEN_STORE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="accountTypeId != null" >
+        ACCOUNT_TYPE_ID,
+      </if>
+      <if test="companyStatus != null" >
+        COMPANY_STATUS,
+      </if>
+      <if test="indentityStatus != null" >
+        INDENTITY_STATUS,
+      </if>
+      <if test="addTime != null" >
+        ADD_TIME,
+      </if>
+      <if test="creator != null" >
+        CREATOR,
+      </if>
+      <if test="modTime != null" >
+        MOD_TIME,
+      </if>
+      <if test="updater != null" >
+        UPDATER,
+      </if>
+      <if test="ssoAccountId != null" >
+        SSO_ACCOUNT_ID,
+      </if>
+      <if test="uuid != null" >
+        UUID,
+      </if>
+      <if test="weixinOpenid != null" >
+        WEIXIN_OPENID,
+      </if>
+      <if test="lastLoginTime != null" >
+        LAST_LOGIN_TIME,
+      </if>
+      <if test="employeeId != null" >
+        EMPLOYEE_ID,
+      </if>
+      <if test="from != null" >
+        `FROM`,
+      </if>
+      <if test="syncStatus != null" >
+        SYNC_STATUS,
+      </if>
+      <if test="contact != null" >
+        CONTACT,
+      </if>
+      <if test="inviteCode != null" >
+        INVITE_CODE,
+      </if>
+      <if test="avatarDomain != null" >
+        AVATAR_DOMAIN,
+      </if>
+      <if test="avatarUri != null" >
+        AVATAR_URI,
+      </if>
+      <if test="accountFrom != null" >
+        ACCOUNT_FROM,
+      </if>
+      <if test="accountType != null" >
+        ACCOUNT_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="accountId != null" >
+        #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="payPassword != null" >
+        #{payPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="experience != null" >
+        #{experience,jdbcType=INTEGER},
+      </if>
+      <if test="isOpenStore != null" >
+        #{isOpenStore,jdbcType=BIT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="accountTypeId != null" >
+        #{accountTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="companyStatus != null" >
+        #{companyStatus,jdbcType=BIT},
+      </if>
+      <if test="indentityStatus != null" >
+        #{indentityStatus,jdbcType=BIT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=INTEGER},
+      </if>
+      <if test="modTime != null" >
+        #{modTime,jdbcType=BIGINT},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=INTEGER},
+      </if>
+      <if test="ssoAccountId != null" >
+        #{ssoAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinOpenid != null" >
+        #{weixinOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null" >
+        #{lastLoginTime,jdbcType=BIGINT},
+      </if>
+      <if test="employeeId != null" >
+        #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="from != null" >
+        #{from,jdbcType=BIT},
+      </if>
+      <if test="syncStatus != null" >
+        #{syncStatus,jdbcType=BIT},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteCode != null" >
+        #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarDomain != null" >
+        #{avatarDomain,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUri != null" >
+        #{avatarUri,jdbcType=VARCHAR},
+      </if>
+      <if test="accountFrom != null" >
+        #{accountFrom,jdbcType=BIT},
+      </if>
+      <if test="accountType != null" >
+        #{accountType,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.vedeng.mjx.domain.TopAccountJx" >
+    <!--          -->
+    update T_OP_ACCOUNT
+    <set >
+      <if test="account != null" >
+        ACCOUNT = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null" >
+        COMPANY_NAME = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        MOBILE = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        NICKNAME = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="payPassword != null" >
+        PAY_PASSWORD = #{payPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="experience != null" >
+        EXPERIENCE = #{experience,jdbcType=INTEGER},
+      </if>
+      <if test="isOpenStore != null" >
+        IS_OPEN_STORE = #{isOpenStore,jdbcType=BIT},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=BIT},
+      </if>
+      <if test="accountTypeId != null" >
+        ACCOUNT_TYPE_ID = #{accountTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="companyStatus != null" >
+        COMPANY_STATUS = #{companyStatus,jdbcType=BIT},
+      </if>
+      <if test="indentityStatus != null" >
+        INDENTITY_STATUS = #{indentityStatus,jdbcType=BIT},
+      </if>
+      <if test="addTime != null" >
+        ADD_TIME = #{addTime,jdbcType=BIGINT},
+      </if>
+      <if test="creator != null" >
+        CREATOR = #{creator,jdbcType=INTEGER},
+      </if>
+      <if test="modTime != null" >
+        MOD_TIME = #{modTime,jdbcType=BIGINT},
+      </if>
+      <if test="updater != null" >
+        UPDATER = #{updater,jdbcType=INTEGER},
+      </if>
+      <if test="ssoAccountId != null" >
+        SSO_ACCOUNT_ID = #{ssoAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="uuid != null" >
+        UUID = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="weixinOpenid != null" >
+        WEIXIN_OPENID = #{weixinOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="lastLoginTime != null" >
+        LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=BIGINT},
+      </if>
+      <if test="employeeId != null" >
+        EMPLOYEE_ID = #{employeeId,jdbcType=INTEGER},
+      </if>
+      <if test="from != null" >
+        `FROM` = #{from,jdbcType=BIT},
+      </if>
+      <if test="syncStatus != null" >
+        SYNC_STATUS = #{syncStatus,jdbcType=BIT},
+      </if>
+      <if test="contact != null" >
+        CONTACT = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteCode != null" >
+        INVITE_CODE = #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarDomain != null" >
+        AVATAR_DOMAIN = #{avatarDomain,jdbcType=VARCHAR},
+      </if>
+      <if test="avatarUri != null" >
+        AVATAR_URI = #{avatarUri,jdbcType=VARCHAR},
+      </if>
+      <if test="accountFrom != null" >
+        ACCOUNT_FROM = #{accountFrom,jdbcType=BIT},
+      </if>
+      <if test="accountType != null" >
+        ACCOUNT_TYPE = #{accountType,jdbcType=BIT},
+      </if>
+    </set>
+    where ACCOUNT_ID = #{accountId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.vedeng.mjx.domain.TopAccountJx" >
+    <!--          -->
+    update T_OP_ACCOUNT
+    set ACCOUNT = #{account,jdbcType=VARCHAR},
+      COMPANY_NAME = #{companyName,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      MOBILE = #{mobile,jdbcType=VARCHAR},
+      NICKNAME = #{nickname,jdbcType=VARCHAR},
+      PAY_PASSWORD = #{payPassword,jdbcType=VARCHAR},
+      EXPERIENCE = #{experience,jdbcType=INTEGER},
+      IS_OPEN_STORE = #{isOpenStore,jdbcType=BIT},
+      STATUS = #{status,jdbcType=BIT},
+      ACCOUNT_TYPE_ID = #{accountTypeId,jdbcType=INTEGER},
+      COMPANY_STATUS = #{companyStatus,jdbcType=BIT},
+      INDENTITY_STATUS = #{indentityStatus,jdbcType=BIT},
+      ADD_TIME = #{addTime,jdbcType=BIGINT},
+      CREATOR = #{creator,jdbcType=INTEGER},
+      MOD_TIME = #{modTime,jdbcType=BIGINT},
+      UPDATER = #{updater,jdbcType=INTEGER},
+      SSO_ACCOUNT_ID = #{ssoAccountId,jdbcType=INTEGER},
+      UUID = #{uuid,jdbcType=VARCHAR},
+      WEIXIN_OPENID = #{weixinOpenid,jdbcType=VARCHAR},
+      LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=BIGINT},
+      EMPLOYEE_ID = #{employeeId,jdbcType=INTEGER},
+      `FROM` = #{from,jdbcType=BIT},
+      SYNC_STATUS = #{syncStatus,jdbcType=BIT},
+      CONTACT = #{contact,jdbcType=VARCHAR},
+      INVITE_CODE = #{inviteCode,jdbcType=VARCHAR},
+      AVATAR_DOMAIN = #{avatarDomain,jdbcType=VARCHAR},
+      AVATAR_URI = #{avatarUri,jdbcType=VARCHAR},
+      ACCOUNT_FROM = #{accountFrom,jdbcType=BIT},
+      ACCOUNT_TYPE = #{accountType,jdbcType=BIT}
+    where ACCOUNT_ID = #{accountId,jdbcType=INTEGER}
+  </update>
+</mapper>

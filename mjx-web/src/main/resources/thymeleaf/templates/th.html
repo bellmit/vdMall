@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<meta charset="UTF-8"/>
+	<title>test thymeleaf</title>
+</head>
+<body>
+   hi, <b th:text="${name}" >
+
+       <div th:text="${skuVo.brand.getBrandName()}"></div>
+
+       [[${skuVo.brand.getBrandName()}]]
+
+   </b>
+
+   <br />
+
+   静态资源版本号：<b th:text="${staticResourcesVersion}" >
+
+
+   </b>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vedeng.mjx.mapper.ext.TOpAccountAddressExtMapper">
+    <!--根据最新的地址主键区查-->
+    <select id="queryNewAddressInfo" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            ACCOUNT_ADDRESS_ID as accountAddressId,
+            ACCOUNT_NAME as accountName,
+            PHONE as phone,
+            REGION_NAME as regionName,
+            ADDRESS_INFO as addressInfo,
+            IS_DEFAULT_ADDRESS as isDefaultAddress,
+            IS_DEFAULT_TICKET AS isDefaultTicket,
+            LABEL as label
+        FROM
+            V_ACCOUNT_ADDRESS
+        WHERE
+        IS_DEL = 0
+        and ACCOUNT_ADDRESS_ID = #{addressId}
+
+    </select>
+    <!--根据最新的地址主键区查-->
+    <select id="queryAddressInfoApp" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            ACCOUNT_ADDRESS_ID as addressId,
+            ACCOUNT_NAME as accountName,
+            PHONE as phone,
+            REGION_NAME as regionName,
+            ADDRESS_INFO as addressInfo,
+            IS_DEFAULT_ADDRESS as isDefAddress,
+            LABEL as label
+        FROM
+            V_ACCOUNT_ADDRESS
+        WHERE
+        IS_DEL = 0
+        and ACCOUNT_ADDRESS_ID = #{addressId}
+
+    </select>
+
+
+    <!--去查最近更新的地址-->
+    <select id="queryNewAddress" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt" resultType="java.util.Map">
+        SELECT
+            ACCOUNT_ADDRESS_ID as accountAddressId,
+            ACCOUNT_NAME as accountName,
+            PHONE as phone,
+            REGION_NAME as regionName,
+            ADDRESS_INFO as addressInfo,
+            IS_DEFAULT_ADDRESS as isDefaultAddress,
+            IS_DEFAULT_TICKET AS isDefaultTicket,
+            LABEL as label
+        FROM
+            V_ACCOUNT_ADDRESS
+        WHERE
+        IS_DEL = 0
+        and ACCOUNT_ID = #{accountId}
+        ORDER BY MOD_TIME desc
+        limit 1
+
+    </select>
+    <!--去查最近更新的地址-->
+    <select id="queryNewAddressForApp" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt" resultType="java.util.Map">
+        SELECT
+            ACCOUNT_ADDRESS_ID as addressId,
+            ACCOUNT_NAME as accountName,
+            PHONE as phone,
+            REGION_NAME as regionName,
+            ADDRESS_INFO as addressInfo,
+            IS_DEFAULT_ADDRESS as isDefAddress,
+            IS_DEFAULT_TICKET AS isDefTicket,
+            LABEL as label
+        FROM
+            V_ACCOUNT_ADDRESS
+        WHERE
+        IS_DEL = 0
+        and ACCOUNT_ID = #{accountId}
+        ORDER BY MOD_TIME desc
+        limit 1
+
+    </select>
+
+    <!--最近订单的收货地址-->
+    <select id="queryOrderAddress" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt" resultType="java.lang.String">
+        SELECT
+         DELIVERY_ADDRESS_ID as addressId
+        FROM
+            V_ORDER
+        WHERE
+            IS_DEL = 0
+            and ACCOUNT_ID = #{accountId}
+        ORDER BY ADD_TIME desc
+        LIMIT 1
+
+    </select>
+
+    <!--查询默认地址-->
+    <select id="queryDefaultAddress" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt" resultType="java.util.Map">
+        SELECT
+            ACCOUNT_ADDRESS_ID as accountAddressId,
+            ACCOUNT_NAME as accountName,
+            PHONE as phone,
+            REGION_NAME as regionName,
+            ADDRESS_INFO as addressInfo,
+            IS_DEFAULT_ADDRESS as isDefaultAddress,
+            IS_DEFAULT_TICKET AS isDefaultTicket,
+            LABEL as label
+        FROM
+            V_ACCOUNT_ADDRESS
+        WHERE
+            IS_DEL = 0
+            and IS_DEFAULT_ADDRESS = 1
+            and ACCOUNT_ID = #{accountId}
+        limit 1
+    </select>
+    <!--查询默认地址-->
+    <select id="queryDefaultAddressForApp" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt" resultType="java.util.Map">
+        SELECT
+            ACCOUNT_ADDRESS_ID as addressId,
+            ACCOUNT_NAME as accountName,
+            PHONE as phone,
+            REGION_NAME as regionName,
+            ADDRESS_INFO as addressInfo,
+            IS_DEFAULT_ADDRESS as isDefAddress,
+            IS_DEFAULT_TICKET AS isDefTicket,
+            LABEL as label
+        FROM
+            V_ACCOUNT_ADDRESS
+        WHERE
+            IS_DEL = 0
+            and IS_DEFAULT_ADDRESS = 1
+            and ACCOUNT_ID = #{accountId}
+        limit 1
+    </select>
+    <!--查询省市区的明细-->
+    <select id="queryRegionInfo" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt"
+            resultType="com.vedeng.mjx.domain.TRegion">
+        SELECT
+            REGION_ID as regionId,
+            PARENT_ID as parentId,
+            REGION_NAME as regionName
+        FROM
+            T_REGION
+        where
+        <choose>
+            <when test="flagId != null and flagId==1 ">
+                PARENT_ID = 1
+            </when>
+            <otherwise>
+                PARENT_ID = #{regionId}
+            </otherwise>
+        </choose>
+    </select>
+    <!--查询省市区的明细-->
+    <select id="queryRegionInfomation" parameterType="com.vedeng.mjx.domain.TRegion"
+            resultType="com.vedeng.mjx.domain.TRegion">
+        SELECT
+            REGION_ID as regionId,
+            PARENT_ID as parentId,
+            REGION_NAME as regionName
+        FROM
+            T_REGION
+        where
+              PARENT_ID = #{regionId}
+    </select>
+    <select id="queryRegionInfoById" parameterType="com.vedeng.mjx.domain.TRegion"
+            resultType="com.vedeng.mjx.domain.TRegion">
+        SELECT
+            REGION_ID as regionId,
+            PARENT_ID as parentId,
+            REGION_NAME as regionName
+        FROM
+            T_REGION
+        where
+              REGION_ID = #{regionId}
+    </select>
+    <!--一次性查询省市区-->
+    <select id="queryRegionInfoOneTime" parameterType="java.lang.Integer" resultType="com.vedeng.mjx.domain.TRegion">
+        SELECT
+            REGION_ID as regionId,
+            PARENT_ID as parentId,
+            REGION_NAME as regionName
+        FROM
+            T_REGION
+        where
+                PARENT_ID = #{parentId}
+
+    </select>
+
+    <!--新增地址信息-->
+    <insert id="insertAddressInfo" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt" useGeneratedKeys="true" keyProperty="addressId">
+        insert into V_ACCOUNT_ADDRESS(
+          REGION_ID,
+          REGION_IDS,
+          REGION_NAME,
+          ACCOUNT_ID,
+          ACCOUNT_NAME,
+          ADDRESS_INFO,
+          PHONE,
+          <if test="isDefAddress !=null and isDefAddress != ''">
+          IS_DEFAULT_ADDRESS,
+          </if>
+          <if test="isDefTicket !=null and isDefTicket != ''">
+          IS_DEFAULT_TICKET,
+          </if>
+          POSTCODE,
+        SYNC_TOERP_TIMES,
+        IS_SYNC_TOERP,
+          ADD_TIME,
+          MOD_TIME,
+          CREATOR,
+        <if test="label !=null and label != ''">
+            LABEL,
+        </if>
+
+        IS_DEL
+        )values(
+          #{districtCode},
+          #{regionIds},
+          #{regionName},
+          #{accountId},
+          #{accountName},
+          #{addressInfo},
+          #{phone},
+        <if test="isDefAddress !=null and isDefAddress != ''">
+          #{isDefAddress},
+        </if>
+        <if test="isDefTicket !=null and isDefTicket != ''">
+          #{isDefTicket},
+        </if>
+          #{postcode},
+          0,
+          0,
+          now(),
+          now(),
+          #{creator},
+        <if test="label !=null and label != ''">
+            #{label},
+        </if>
+          0
+        )
+    </insert>
+
+    <!--查询地址列表-->
+    <select id="queryAddressList" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt" resultType="com.vedeng.mjx.domain.ext.VAccountAddressExt">
+      SELECT
+        ACCOUNT_ADDRESS_ID as addressId,
+        REGION_IDS as regionIds,
+        REGION_NAME as regionName,
+        ACCOUNT_NAME as accountName,
+        ADDRESS_INFO as addressInfo,
+        PHONE as phone,
+        IS_DEFAULT_ADDRESS as isDefAddress,
+        IS_DEFAULT_TICKET as isDefTicket,
+        LABEL as label
+      FROM
+        V_ACCOUNT_ADDRESS
+      WHERE
+        IS_DEL = 0
+        and ACCOUNT_ID = #{accountId}
+        order by ADD_TIME desc
+    </select>
+
+    <!--修改当前默认地址数据-->
+    <update id="updateAddressDefault" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt">
+        UPDATE V_ACCOUNT_ADDRESS
+        SET IS_DEFAULT_ADDRESS = 0,
+        IS_SYNC_TOERP= 0,
+        SYNC_TOERP_TIMES=0
+        WHERE
+            ACCOUNT_ID = #{accountId}
+    </update>
+
+    <!--修改当前默认票据数据-->
+    <update id="updateTicketDefault" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt">
+        UPDATE V_ACCOUNT_ADDRESS
+        SET IS_DEFAULT_TICKET = 0,
+        IS_SYNC_TOERP= 0,
+        SYNC_TOERP_TIMES=0
+        WHERE
+            ACCOUNT_ID = #{accountId}
+    </update>
+
+    <!--查询地址详情-->
+    <select id="queryAddressInfo" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt" resultType="com.vedeng.mjx.domain.ext.VAccountAddressExt">
+       SELECT
+            ACCOUNT_ADDRESS_ID as addressId,
+            REGION_IDS as regionIds,
+            REGION_NAME as regionName,
+            ACCOUNT_ID as accountId,
+            ACCOUNT_NAME as accountName,
+            ADDRESS_INFO as addressInfo,
+            PHONE as phone,
+            IS_DEFAULT_ADDRESS as isDefAddress,
+            IS_DEFAULT_TICKET as isDefTicket,
+            LABEL as label
+      FROM
+            V_ACCOUNT_ADDRESS
+      WHERE
+            IS_DEL = 0
+        and ACCOUNT_ADDRESS_ID = #{addressId}
+
+    </select>
+
+    <!--修改地址信息-->
+    <update id="updateAddressInfo" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt">
+        update V_ACCOUNT_ADDRESS set
+    <if test="districtCode !=null and districtCode!= ''"> REGION_ID = #{districtCode},</if>
+    <if test="regionIds !=null and regionIds!= ''"> REGION_IDS = #{regionIds},</if>
+    <if test="regionName !=null and regionName!= ''"> REGION_NAME = #{regionName},</if>
+    <if test="accountId !=null"> ACCOUNT_ID = #{accountId},</if>
+    <if test="accountName !=null and accountName!= ''"> ACCOUNT_NAME = #{accountName},</if>
+    <if test="addressInfo !=null and addressInfo!= ''"> ADDRESS_INFO = #{addressInfo},</if>
+    <if test="phone !=null and phone!= ''"> PHONE = #{phone},</if>
+    <if test="isDefAddress !=null and isDefAddress!= ''"> IS_DEFAULT_ADDRESS = #{isDefAddress},</if>
+    <if test="isDefTicket !=null and isDefTicket!= ''"> IS_DEFAULT_TICKET = #{isDefTicket},</if>
+    <if test="label !=null"> LABEL = #{label},</if>
+        IS_SYNC_TOERP= 0,
+        SYNC_TOERP_TIMES=0,
+        MOD_TIME = now(),
+        UPDATER = #{updater}
+        where ACCOUNT_ADDRESS_ID = #{addressId}
+    </update>
+
+    <!--删除地址-->
+    <update id="deleteAddressInfo" parameterType="com.vedeng.mjx.domain.ext.VAccountAddressExt">
+        update V_ACCOUNT_ADDRESS set IS_DEL = '1', IS_SYNC_TOERP= 0,SYNC_TOERP_TIMES=0,MOD_TIME = now()  where ACCOUNT_ADDRESS_ID = #{addressId}
+    </update>
+    
+    <select id="selectAddressById" resultType="com.vedeng.mjx.domain.ext.VAccountAddressExt">
+        select ACCOUNT_ADDRESS_ID as accountAddressId,REGION_ID as regionId,ACCOUNT_ID as accountId,
+        ACCOUNT_NAME as accountName,REGION_IDS as regionIds,REGION_NAME as regionName,ADDRESS_INFO as addressInfo,PHONE as phone
+        from V_ACCOUNT_ADDRESS
+        where ACCOUNT_ADDRESS_ID = #{accountAddressId}
+        and IS_DEL = 0
+    </select>
+    <select id="addressCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*)
+        from V_ACCOUNT_ADDRESS
+        where ACCOUNT_ID = #{accountAddressId}
+        and IS_DEL = 0
+    </select>
+
+    <select id="queryNoSyncErpIds" parameterType="map" resultType="com.vedeng.mjx.domain.ext.VAccountAddressExt">
+        SELECT
+        vad.ACCOUNT_ADDRESS_ID as accountAddressId,
+        vad.REGION_IDS as regionIds,
+        vad.ACCOUNT_NAME as accountName,
+        vad.ADDRESS_INFO as addressInfo,
+        vad.PHONE as phone,
+        vad.IS_DEFAULT_ADDRESS as isDefAddress,
+        vad.IS_DEFAULT_TICKET as isDefTicket,
+        vad.IS_DEL as delFlag,
+        vad.LABEL as label,
+        toa.MOBILE as curUserPhoneNum
+        FROM V_ACCOUNT_ADDRESS vad
+        LEFT JOIN T_OP_ACCOUNT toa ON vad.ACCOUNT_ID=toa.ACCOUNT_ID
+        WHERE  vad.IS_SYNC_TOERP=0 AND vad.SYNC_TOERP_TIMES IN (0,1,2)
+        <if test="shardingTotal!=null and shardingIndex!=null">
+            AND vad.ACCOUNT_ADDRESS_ID % #{shardingTotal} = #{shardingIndex}
+        </if>
+        <if test="accountAddressId !=null">
+            AND vad.ACCOUNT_ADDRESS_ID=#{accountAddressId}
+        </if>
+    </select>
+    <update id="updateSyncAddr" parameterType="map" >
+        UPDATE V_ACCOUNT_ADDRESS
+        <set>
+            <if test="syncToErpFlag!=null">
+                IS_SYNC_TOERP = #{syncToErpFlag},
+            </if>
+            <if test="syncToErpTimes!=null">
+                SYNC_TOERP_TIMES = SYNC_TOERP_TIMES +1,
+            </if>
+        </set>
+        WHERE ACCOUNT_ADDRESS_ID = #{accountAddressId}
+    </update>
+
+</mapper>

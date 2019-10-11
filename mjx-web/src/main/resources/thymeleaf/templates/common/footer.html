@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!-- th:fragment 定义需要引入的代码块，该div包含的内容即为引用的公共内容 -->
+<div	th:fragment="common_footer(links)">
+    <!--	Common	styles	and	scripts	-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/common/base.css}">
+    <script th:src="@{js/common/zepto.min.js}"></script>
+    <script th:src="@{js/common/touch.js}"></script>
+    <script th:src="@{js/common/fx.js}"></script>
+    <script th:src="@{js/common/fx_methods.js}"></script>
+    <script th:src="@{js/common/bannerTouch.js}"></script>
+    <script th:src="@{js/common/BrowserShare.js}"></script>
+    <!--/*	Per-page	placeholder	for	additional	links	*/-->
+    <th:block	th:replace="${links}"	/>
+</div>
+</html>

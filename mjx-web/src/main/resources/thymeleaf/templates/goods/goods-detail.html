@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head th:replace="common/header::common_header(~{::title},~{::link})">
+    <title th:text="${goodsEntityInfo?.skuInfo?.skuName} + '_贝登精选'"></title>
+    <link rel="stylesheet" th:href="@{'/css/common/base.css?'+${staticTimeStamp}}">
+    <link rel="stylesheet" th:href="@{'/css/common/swiper.min.css?'+${staticTimeStamp}}">
+    <link rel="stylesheet" th:href="@{'/css/goods-detail.css?'+${staticTimeStamp}}">
+</head>
+
+
+<body>
+<div th:include="common/common-js::common-js" th:remove="tag"></div>
+<!-- 跳转链接遮罩 -->
+<div class="router-fullpage">
+    <!-- 右上角跳转选项 -->
+    <div class="goods-detail-router">
+        <div class="router-body">
+            <div class="router-index">
+                <i class="hc-icon icon-home"></i>
+                <span class="router-word">首页</span>
+            </div>
+            <div class="router-search">
+                <i class="hc-icon icon-search"></i>
+                <span class="router-word">搜索</span>
+            </div>
+            <div class="router-shopcart">
+                <i class="hc-icon icon-shopping-cart"></i>
+                <span class="router-word">购物车</span>
+            </div>
+            <input type="hidden" id="loginAddress" th:value="${loginUrl}">
+            <div class="router-personal">
+                <i class="hc-icon icon-user"></i>
+                <span class="router-word">个人中心</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="goods-detail">
+    <!-- 头部 小于90px -->
+    <div class="goods-detail-header">
+        <div class="goods-detail-header-left">
+            <div class="i-left">
+                <i class="vd-icon icon-app-left"></i>
+            </div>
+        </div>
+        <div class="goods-detail-header-right">
+            <div class="i-more">
+                <i class="vd-icon icon-app-more"></i>
+            </div>
+        </div>
+    </div>
+    <!-- 头部 大于90px -->
+    <div class="goods-detail-header-all">
+        <div class="goods-detail-header-all-left">
+            <div class="i-left">
+                <i class="vd-icon icon-app-left"></i>
+            </div>
+        </div>
+        <div class="goods-detail-header-all-mid">
+            <div class="mid-product">
+                商品
+            </div>
+            <div class="mid-detail">
+                详情
+            </div>
+        </div>
+        <div class="goods-detail-header-all-right">
+            <div class="i-more">
+                <i class="vd-icon icon-app-more"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- 轮播图 -->
+    <div class="swiper-container swiper-container-small" id="banner">
+        <div class="swiper-wrapper swiper-wrapper-small">
+            <div class="swiper-slide" th:each="entity,itm:${goodsEntityInfo?.picList}">
+                <!--<div class="swiper-slide" >-->
+                <!--<img src="/images/u90.jpg" alt="请稍等。。">-->
+                <img th:src="${entity.url800}" alt="图片加载中。。。">
+            </div>
+        </div>
+        <!-- 如果需要分页器 -->
+        <div class="swiper-pagination swiper-pagination-small"></div>
+    </div>
+    <!-- 新品 热销 商品名称 -->
+    <div class="goods-detail-name">
+        <div class="goods-detail-name-title">
+            <span class="nh" >
+                <span class="spjx" th:if="${isChosen !=null && isChosen == 1}"></span>
+                <span class="new" th:if="${isNew !=null && isNew == 1}">新品</span>
+                <span class="hot" th:if="${isHot !=null && isHot == 1}">热销</span>
+            </span>
+            <span class="skuName" th:text="${goodsEntityInfo?.skuInfo?.skuName}"></span>
+        </div>
+        <div class="title-sub" th:if="not ${#strings.isEmpty(spuTitle)}" th:utext="${spuTitle}"></div>
+        <!--市场价不为null和0 已登录 加入贝登精选 是贝登精选会员-->
+        <div class="goods-detail-name-price" th:if="${goodsEntityInfo?.skuInfo?.jxMarketPrice != 0 and #bools.isTrue(checkPriceAuth) and #bools.isTrue(isOnSale)}">
+            <span >
+            <span class="left">市场价：</span>
+            <span class="right">
+                <span class="price-num-sign">￥</span>
+                <span th:text="${goodsEntityInfo?.skuInfo?.jxMarketPrice}"></span>
+            </span>
+            </span>
+        </div>
+    </div>
+    <!-- 规格（型号）和属性 -->
+    <div class="spec-and-attr" >
+        <div class="spec-and-attr-inner">
+            <div class="inner-left">
+                <i class="hc-icon icon-purchase"></i>
+                <div class="has-choosed">已选择</div>
+            </div>
+            <div class="inner-line"></div>
+            <div class="inner-right">
+
+                <div class="goods-spec" th:if="${not #strings.isEmpty(goodsEntityInfo?.skuInfo?.modelSpecShow)}">
+                    <!-- 规格型号 -->
+                    <span class="spec" th:text="${goodsEntityInfo?.skuInfo?.modelSpecShowChineseName}"></span>：
+                    <span class="spec-desc" th:text="${goodsEntityInfo?.skuInfo?.modelSpecShow}"></span>
+                </div>
+
+                <div class="goods-attr" th:if="${not #strings.isEmpty(goodsEntityInfo?.skuInfo?.skuAttrCombin?.baseAttributeValues)}">
+                    <span class="attr">
+                        属性：
+                    </span>
+                    <span style="width: 78%;"   >
+                        <span >
+                            <span class="attr-desc" th:text="${goodsEntityInfo?.skuInfo?.skuAttrCombin?.baseAttributeValues}"></span>
+                        </span>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+        <div class="i-right">
+            <i class="hc-icon icon-app-right"></i>
+        </div>
+    </div>
+    <!-- 服务 -->
+    <span class="nh" th:if="${isSeven == 1}">
+        <div class="goods-detail-service">
+            <div class="goods-detail-service-left">服务</div>
+            <div class="goods-detail-service-right">
+                <i class="hc-icon icon-yes1"></i>
+                <span class="goods-detail-service-right-word">支持7天无理由退换货</span>
+            </div>
+        </div>
+    </span>
+
+    <!-- 品牌 型号 订货号 注册证号/备案凭证号 商品参数-->
+    <div class="goods-detail-desc">
+        <div class="desc-brand desc">
+            <div class="desc-brand-left left">品牌</div>
+            <div class="desc-brand-right right" th:text="${goodsEntityInfo?.brandInfo?.brandName}"></div>
+        </div>
+        <div class="desc-model desc" th:if="${not #strings.isEmpty(goodsEntityInfo?.skuInfo?.modelSpecShow)}">
+            <!-- 规格或型号 -->
+            <div class="desc-model-left left" th:text="${goodsEntityInfo?.skuInfo?.modelSpecShowChineseName}"></div>
+            <div class="desc-model-right right" th:text="${goodsEntityInfo?.skuInfo?.modelSpecShow}"></div>
+        </div>
+        <div class="desc-order desc" >
+            <div class="desc-order-left left">订货号</div>
+            <div class="desc-order-right right" th:text="${goodsEntityInfo?.skuInfo?.skuNo}"></div>
+        </div>
+        <div class="desc-apply desc" th:if="${not #strings.isEmpty(goodsEntityInfo?.registNumInfo?.registrationNumber)}">
+            <div class="desc-apply-left left" th:text="${goodsEntityInfo?.registNumInfo?.registrationName}">注册证号</div>
+            <div class="desc-apply-right right" th:text="${goodsEntityInfo?.registNumInfo?.registrationNumber}"></div>
+        </div>
+        <!-- 商品参数 -->
+        <div class="goods-detail-param" th:if="${not #lists.isEmpty(goodsEntityInfo?.skuInfo?.technicalParameterKey)}">
+            <div class="param-left">商品参数</div>
+            <div class="param-right">
+                <div class="param-right-word">
+                    <span class="prop-oneline" th:each="technicalParameterKey,technicalParameterKeyindex:${goodsEntityInfo?.skuInfo?.technicalParameterKey}" >
+                         [[${technicalParameterKey}]]：[[${goodsEntityInfo.skuInfo.technicalParameterValue[technicalParameterKeyindex.index]}]]
+                    </span>
+                    <span class="prop-oneline" th:each="specParameterKey,specParameterKeyindex:${goodsEntityInfo?.skuInfo?.specParameterKey}" >
+                        [[${specParameterKey}]]：[[${goodsEntityInfo.skuInfo.specParameterValue[specParameterKeyindex.index]}]]
+                    </span>
+                    <span class="prop-oneline" th:each="performanceParameterKey,performanceindex:${goodsEntityInfo?.skuInfo?.performanceParameterKey}" >
+                        [[${performanceParameterKey}]]：[[${goodsEntityInfo.skuInfo.performanceParameterValue[performanceindex.index]}]]
+                    </span>
+                </div>
+                <div class="i-right">
+                    <i class="hc-icon icon-app-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 包装 存储 售后 退换货 -->
+    <div class="goods-four-keywords" >
+        <div class="goods-package-param goods-one-keywords" th:if="${(not #strings.isEmpty(goodsEntityInfo?.skuInfo?.baseUnitName) and goodsEntityInfo?.skuInfo?.showModel == true) or
+             not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packageLength) or not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packingList) or
+             not #strings.isEmpty(goodsEntityInfo?.skuInfo?.minOrder) or not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packageLength) or
+             not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packageWidth) or not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packageHeight)}">
+            <div class="param-left">包装</div>
+            <div class="param-right">
+                <!--包装规格-->
+                <div class="param-right-word">
+                    <!--商品为器械、配件、其他-->
+                    <span th:if="${goodsEntityInfo?.skuInfo?.showModel == true}">
+                        包装单位：<span th:text="${goodsEntityInfo?.skuInfo?.baseUnitName}"></span>
+                    </span>
+                    <!--商品为耗材、试剂时-->
+                    <span th:if="${(goodsEntityInfo?.skuInfo?.showModel == false) and not #strings.isEmpty(goodsEntityInfo?.skuInfo?.changeNum) and (goodsEntityInfo?.skuInfo?.changeNum >0) and not #strings.isEmpty(goodsEntityInfo?.skuInfo?.minUnitName) and not #strings.isEmpty(goodsEntityInfo?.skuInfo?.baseUnitName)}">
+                        <span>
+                        包装规格：
+                        <span th:text="${goodsEntityInfo?.skuInfo?.changeNum}"></span>
+                        <span th:text="${goodsEntityInfo?.skuInfo?.minUnitName}"></span>
+                        /
+                        <span th:text="${goodsEntityInfo?.skuInfo?.baseUnitName}"></span>
+                        </span>
+                    </span>
+                    <div th:if="${not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packageLength) && not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packageWidth) && not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packageHeight) }">
+                        包装体积：
+                        长度&nbsp;<span th:text="${goodsEntityInfo?.skuInfo?.packageLength}" th:if="${goodsEntityInfo?.skuInfo?.packageLength>0}"></span>&nbsp;cm
+                        宽度&nbsp;<span th:text="${goodsEntityInfo?.skuInfo?.packageWidth}" th:if="${goodsEntityInfo?.skuInfo?.packageWidth>0}"></span>&nbsp;cm
+                        高度&nbsp;<span th:text="${goodsEntityInfo?.skuInfo?.packageHeight}" th:if="${goodsEntityInfo?.skuInfo?.packageHeight>0}"></span>&nbsp;cm
+                        毛重：<span th:text="${goodsEntityInfo?.skuInfo?.grossWeight}" th:if="${goodsEntityInfo?.skuInfo?.grossWeight>0}"></span>&nbsp;kg
+                        <!--商品为器械、配件、其他-->
+                        <span th:if="${goodsEntityInfo?.skuInfo?.showModel == true and not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packingList) }">
+                        包装清单：<span th:text="${goodsEntityInfo?.skuInfo?.packingList}"></span>
+                    </span>
+                        <!--商品为耗材、试剂时-->
+                        <span th:if="${goodsEntityInfo?.skuInfo?.showModel == false and not #strings.isEmpty(goodsEntityInfo?.skuInfo?.minOrder)}" >
+                        最小起订量：<span th:text="${goodsEntityInfo?.skuInfo?.minOrderInt}"></span>
+                    </span>
+                    </div>
+                </div>
+                <div class="i-right">
+                    <i class="hc-icon icon-app-right"></i>
+                </div>
+            </div>
+        </div>
+
+            <!--商品为耗材、试剂时-->
+            <div class="goods-storage-param goods-one-keywords" th:if="${goodsEntityInfo?.skuInfo?.showModel == false and (not #strings.isEmpty(goodsEntityInfo?.skuInfo?.storageConditionOne) or not #strings.isEmpty(goodsEntityInfo?.skuInfo?.storageConditionTwo) or not #strings.isEmpty(goodsEntityInfo?.skuInfo?.effectiveDays)) }">
+                <div class="param-left">存储</div>
+                <div class="param-right">
+                    <div class="param-right-word">
+                        <div th:if="${not #strings.isEmpty(goodsEntityInfo?.skuInfo?.storageConditionOne) or not  #strings.isEmpty(goodsEntityInfo?.skuInfo?.storageConditionTwo) }" th:remove="tag">存储条件：</div>
+                        <span th:unless="${#strings.isEmpty(goodsEntityInfo?.skuInfo?.storageConditionOne)}">
+                            <span th:if="${goodsEntityInfo?.skuInfo?.storageConditionOne} == 1">常温 </span>
+                            <span th:if="${goodsEntityInfo?.skuInfo?.storageConditionOne} == 2">冷冻 </span>
+                            <span th:if="${goodsEntityInfo?.skuInfo?.storageConditionOne} == 3">冷藏 </span>
+                        </span>
+                        <span th:unless="${#strings.isEmpty(goodsEntityInfo?.skuInfo?.storageConditionTwo)}">
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.storageConditionTwo,'1')}" th:text="阴凉 " ></span>
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.storageConditionTwo,'2')}" th:text="干燥 "></span>
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.storageConditionTwo,'3')}" th:text="避光 "></span>
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.storageConditionTwo,'4')}" th:text="防潮 "></span>
+                        </span>
+                        <div th:unless="${#strings.isEmpty(goodsEntityInfo?.skuInfo?.effectiveDays)}" th:remove="tag">有效期：</div>
+                        <span th:unless="${#strings.isEmpty(goodsEntityInfo?.skuInfo?.effectiveDays)}">
+                            <span th:text="${goodsEntityInfo?.skuInfo?.effectiveDays}"></span>
+                            <span th:if="${goodsEntityInfo?.skuInfo?.effectiveDayUnit == 1}">天</span>
+                            <span th:if="${goodsEntityInfo?.skuInfo?.effectiveDayUnit == 2}">月</span>
+                            <span th:if="${goodsEntityInfo?.skuInfo?.effectiveDayUnit == 3}">年</span>
+                        </span>
+                    </div>
+                    <div class="i-right">
+                        <i class="hc-icon icon-app-right"></i>
+                    </div>
+                </div>
+            </div>
+
+        <div class="goods-after-sale-param goods-one-keywords" th:if="${not #strings.isEmpty(goodsEntityInfo?.skuInfo?.afterSaleContent) or not #strings.isEmpty(goodsEntityInfo?.skuInfo?.qaYears) }">
+            <div class="param-left">售后</div>
+            <div class="param-right">
+                <div class="param-right-word">
+                    <div th:if="${not #strings.isEmpty(goodsEntityInfo?.skuInfo?.afterSaleContent)}" th:remove="tag">
+                        售后内容：
+                        <span th:unless="${#strings.isEmpty(goodsEntityInfo?.skuInfo?.afterSaleContent)}">
+                        <span th:text="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.afterSaleContent,'1')}?'包安装 ':''"></span>
+                        <span th:text="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.afterSaleContent,'2')}?'包培训 ':''"></span>
+                        <span th:text="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.afterSaleContent,'3')}?'物流点自提 ':''"></span>
+                        <span th:text="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.afterSaleContent,'4')}?'送货上门，含卸货上楼 ':''"></span>
+                        <span th:text="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.afterSaleContent,'5')}?'送货上门，含卸货到楼下 ':''"></span>
+                    </span>
+                    </div>
+                    <div th:if="${not #strings.isEmpty(goodsEntityInfo?.skuInfo?.qaYears)  }" th:remove="tag">
+                        质保年限：<span th:text="${goodsEntityInfo?.skuInfo?.qaYears}"></span>年
+                    </div>
+                </div>
+                <div class="i-right">
+                    <i class="hc-icon icon-app-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 销售攻略 -->
+    <!--用户登录，是贝登精选客户，维护过销售攻略-->
+    <span th:if="${checkPriceAuth != null && checkPriceAuth == true && opGoods != null && opGoods == true}">
+        <div class="sale-raiders">
+            <div class="sale-raiders-inner">
+                <div class="inner-left">
+                    <div class="inner-left-word">
+                        销售攻略
+                    </div>
+                </div>
+                <div class="inner-line"></div>
+                <div class="inner-right">应用场景、商品卖点、竞品对比、商品资料、商品彩页</div>
+            </div>
+            <div class="click-me-wrapper">
+                <div class="click-me">点击查看</div>
+            </div>
+        </div>
+    </span>
+
+    <!-- 图文详情 -->
+    <div class="goods-detail-pic-and-word" id="pic-and-word">
+        <div class="pic-and-word-title">
+            <div class="left-line"></div>
+            <div class="middle-word">图文详情</div>
+            <div class="right-line"></div>
+        </div>
+
+        <!--无论上下架都从erp中查数据 除了商品详情-->
+        <div class="pic-and-word-content">
+            <!--品牌授权书-->
+            <div th:if="${not #lists.isEmpty(goodsEntityInfo?.brandInfo?.authCertFileList)}" th:each="brand:${goodsEntityInfo?.brandInfo?.authCertFileList}">
+                <img th:src="${brand.url}" alt="">
+            </div>
+            <!--商品详情-->
+            <span th:if="${not #strings.isEmpty(goodsEntityInfo?.decriptInfo?.descript)}" th:utext="${goodsEntityInfo?.decriptInfo?.descript}"></span>
+            <!--注册证/备案凭证-->
+            <div th:if="${not #lists.isEmpty(goodsEntityInfo?.registNumInfo?.registrationNumberFileList)}" th:each="registrationNumber:${goodsEntityInfo?.registNumInfo?.registrationNumberFileList}">
+                <img th:src="${registrationNumber.url}" alt="">
+            </div>
+
+            <!--检测文件:优先展示sku的-->
+            <span th:if="${not #lists.isEmpty(goodsEntityInfo?.skuInfo?.skuCheckFileList)}">
+                <div th:each="skuCheck:${goodsEntityInfo?.skuInfo?.skuCheckFileList}">
+                    <img th:src="${skuCheck.url}">
+                </div>
+            </span>
+            <!--检测文件 否则显示spu的-->
+            <span th:if="${#lists.isEmpty(goodsEntityInfo?.skuInfo?.skuCheckFileList) && not #lists.isEmpty(goodsEntityInfo?.spuInfo?.spuCheckFileList)}">
+                <div th:each="spuCheck:${goodsEntityInfo?.spuInfo?.spuCheckFileList}" >
+                    <img th:src="${spuCheck.url}">
+                </div>
+            </span>
+
+            <!--专利文件:优先展示sku的，否则显示spu的-->
+            <span th:if="${not #lists.isEmpty(goodsEntityInfo?.skuInfo?.skuPatentFileList)}">
+                <div th:each="skuPatent:${goodsEntityInfo?.skuInfo?.skuPatentFileList}">
+                    <img th:src="${skuPatent.url}">
+                </div>
+            </span>
+            <!--专利文件 否则显示spu的-->
+            <span th:if="${#lists.isEmpty(goodsEntityInfo?.skuInfo?.skuPatentFileList) && not #lists.isEmpty(goodsEntityInfo?.spuInfo?.spuPatentFileList)}">
+                <div th:each="spuPatent:${goodsEntityInfo?.spuInfo?.spuPatentFileList}" >
+                    <img th:src="${spuPatent.url}">
+                </div>
+            </span>
+        </div>
+    </div>
+    <!-- 底部 下架 -->
+    <div class="prop-hasdown-button" th:unless="${isOnSale}">
+        <div class="goods-detail-footer-none" >
+            商品已下架
+        </div>
+    </div>
+    <!-- 底部 上架 -->
+    <div class="goods-detail-footer">
+        <div class="share-and-shopcart">
+            <div class="footer-share">
+                <i class="hc-icon icon-share1"></i>
+                <div class="share-word">分享</div>
+            </div>
+            <div class="footer-shopcart">
+                <div class="icon-wrapper">
+                    <i class="hc-icon icon-shopping-cart">
+                        <div class="vd-m-9"></div>
+                        <div class="vd-m-99"></div>
+                        <div class="vd-m-99more">99+</div>
+                    </i>
+                </div>
+                <div class="share-shopcart">购物车</div>
+            </div>
+        </div>
+        <div class="link-service">
+            联系客服
+        </div>
+        <!-- 如果下架禁用加类名disabled -->
+        <div class="join-shopcart" th:if="${isOnSale}">
+            加入购物车
+        </div>
+        <div class="join-shopcart disabled " th:unless="${isOnSale}">
+            加入购物车
+        </div>
+    </div>
+
+    <!-- 规格和属性蒙层 -->
+    <div class="spec-and-attr-fullpage">
+    </div>
+    <div class="spec-and-attr-prop">
+        <div class="prop-fork">
+            <i class="hc-icon icon-delete"></i>
+        </div>
+        <div class="prop-goods-info">
+            <div class="prop-goods-img">
+                <img th:src="${goodsEntityInfo?.firstPic?.url360}" alt="图片加载中。。。">
+            </div>
+            <div class="prop-goods-desc">
+                <div class="prop-goods-name">
+                    <span th:text="${goodsEntityInfo?.skuInfo?.skuName}"></span>
+                </div>
+                <div class="prop-goods-order">
+                    订货号：<span class="order-num" th:text="${goodsEntityInfo?.skuInfo?.skuNo}"></span>
+                </div>
+                <div class="prop-market-price" th:if="${isOnSale}">
+                    <span th:if="${goodsEntityInfo?.skuInfo?.jxMarketPrice != 0 and #bools.isTrue(checkPriceAuth)}">
+                    市场价：
+                        <span class="price-num">
+                            <span class="price-num-sign">￥</span>
+                            <span class="price-num-show" th:text="${goodsEntityInfo?.skuInfo?.jxMarketPrice}"></span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="J-skuNo" th:value="${goodsEntityInfo?.skuInfo?.skuNo}">
+        <div class="prop-goods-main-body">
+            <div class="height-wrapper">
+                <div class="spec-attr-line prop-goods-spec"  th:if="${#maps.containsKey(skuAttrList,'modelSpecShowSet') && not #lists.isEmpty(skuAttrList.modelSpecShowSet)}">
+                    <!--规格或型号-->
+                    <div class="spec-title" th:text="${goodsEntityInfo.skuInfo.modelSpecShowChineseName}"></div>
+                    <div class="spec-body" >
+                        <!--当前curModelSpecSkuList 不为空(有属性) 且 全下架 -->
+                        <div class="spec-one-wrapper"   th:each="modelSpec,index:${skuAttrList.modelSpecShowSet}">
+                            <!--有属性的情况-->
+                            <div class="spec-one active" th:data-skuno="${modelSpec.skuNo}" th:if="${#maps.containsKey(modelSpec,'skuNo') && modelSpec.zhiHuiFlag == '1' && modelSpec.skuNo == goodsEntityInfo.skuInfo.skuNo}" th:text="${modelSpec.modelSpecShow}"></div>
+                            <div class="spec-one disabled" th:data-skuno="${modelSpec.skuNo}" th:if="${#maps.containsKey(modelSpec,'skuNo') && modelSpec.zhiHuiFlag == '1' && modelSpec.skuNo != goodsEntityInfo.skuInfo.skuNo}" th:text="${modelSpec.modelSpecShow}"></div>
+                            <div class="spec-one canClick active" th:data-skuno="${modelSpec.skuNo}" th:if="${#maps.containsKey(modelSpec,'skuNo') && modelSpec.zhiHuiFlag == '0' && modelSpec.skuNo == goodsEntityInfo.skuInfo.skuNo}" th:text="${modelSpec.modelSpecShow}"></div>
+                            <div class="spec-one canClick" th:data-skuno="${modelSpec.skuNo}" th:if="${#maps.containsKey(modelSpec,'skuNo') && modelSpec.zhiHuiFlag == '0' && modelSpec.skuNo != goodsEntityInfo.skuInfo.skuNo}" th:text="${modelSpec.modelSpecShow}"></div>
+                            <!--没有属性的情况-->
+                            <div class="spec-one active"  th:if="${not #maps.containsKey(modelSpec,'skuNo') && modelSpec.zhiHuiFlag == '1' && modelSpec.modelSpecShow == goodsEntityInfo.skuInfo.modelSpecShow}" th:text="${modelSpec.modelSpecShow}"></div>
+                            <div class="spec-one disabled"  th:if="${not #maps.containsKey(modelSpec,'skuNo') && modelSpec.zhiHuiFlag == '1' && modelSpec.modelSpecShow != goodsEntityInfo.skuInfo.modelSpecShow}" th:text="${modelSpec.modelSpecShow}"></div>
+                            <div class="spec-one canClick active"  th:if="${not #maps.containsKey(modelSpec,'skuNo') && modelSpec.zhiHuiFlag == '0' && modelSpec.modelSpecShow == goodsEntityInfo.skuInfo.modelSpecShow}" th:text="${modelSpec.modelSpecShow}"></div>
+                            <div class="spec-one canClick"  th:if="${not #maps.containsKey(modelSpec,'skuNo') && modelSpec.zhiHuiFlag == '0' && modelSpec.modelSpecShow != goodsEntityInfo.skuInfo.modelSpecShow}" th:text="${modelSpec.modelSpecShow}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="spec-attr-line prop-goods-attr" th:if="${#maps.containsKey(skuAttrList,'curModelSpecSkuList') && not #lists.isEmpty(skuAttrList.curModelSpecSkuList)}"
+                     >
+                    <div class="attr-title">属性</div>
+                    <div class="attr-body">
+                       
+                            <div class="attr-one-wrapper" th:each="attr,index:${skuAttrList?.curModelSpecSkuList}" th:data-skuno="${attr.skuAttrCombin.skuNo}" th:data-index="${index.index}">
+
+                                <div th:if="${attr.skuAttrCombin.exsitFlag ==0 && goodsEntityInfo.skuInfo.skuNo ne attr.skuAttrCombin.skuNo }"
+                                     class="attr-one disabled" th:text="${attr.skuAttrCombin.baseAttributeValues}"></div>
+                                <div th:if="${attr.skuAttrCombin.exsitFlag ==0 && goodsEntityInfo.skuInfo.skuNo eq attr.skuAttrCombin.skuNo }"
+                                     class="attr-one active" th:text="${attr.skuAttrCombin.baseAttributeValues}"></div>
+
+                                <div th:if="${attr.skuAttrCombin.exsitFlag ==1 && goodsEntityInfo.skuInfo.skuNo eq attr.skuAttrCombin.skuNo}" th:classappend ="'active'"
+                                     class="attr-one " th:text="${attr.skuAttrCombin.baseAttributeValues}"></div>
+
+                                <div th:if="${attr.skuAttrCombin.exsitFlag ==1 && goodsEntityInfo.skuInfo.skuNo ne attr.skuAttrCombin.skuNo}"
+                                     class="attr-one " th:text="${attr.skuAttrCombin.baseAttributeValues}"></div>
+                            </div>
+                    </div>
+                </div>
+                <div class="prop-goods-num" th:if="${isOnSale}">
+                    <div class="num-word">数量</div>
+                    <div class="vd-m-stepper">
+                        <div class="vd-m-left">
+                            <i class="hc-icon icon-deduct"></i>
+                        </div>
+                        <div class="vd-m-middle">
+                            <input class="vd-m-input" type="number" pattern="\d*">
+                        </div>
+                        <div class="vd-m-right">
+                            <i class="hc-icon icon-add"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="prop-sure-button" th:if="${isOnSale}">
+            <!-- 点击规格型号 展示加入购物车按钮 -->
+            <div class="sure-button show-join-button">
+                加入购物车
+            </div>
+            <!-- 点击加入购物车 展示确定按钮 -->
+            <div class="sure-button show-sure-button">
+                确定
+            </div>
+        </div>
+
+        <div class="prop-hasdown-button" th:unless="${isOnSale}">
+            <div class="hasdown-button">
+                商品已下架
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 商品参数蒙层 -->
+    <div class="goods-detail-fullpage">
+    </div>
+    <div class="goods-detail-prop">
+        <div class="prop-title">商品参数</div>
+        <div class="prop-content prop-content-goods-detail">
+            <div>
+                <div class="prop-oneline" th:each="technicalParameterKey,index:${goodsEntityInfo?.skuInfo?.technicalParameterKey}" >
+                    <div class="prop-left" th:text="${technicalParameterKey}"></div>
+                    <div class="prop-right" th:text="${goodsEntityInfo.skuInfo.technicalParameterValue[index.index]}"></div>
+                </div>
+                <div class="prop-oneline" th:each="specParameterKey,index:${goodsEntityInfo?.skuInfo?.specParameterKey}" >
+                    <div class="prop-left" th:text="${specParameterKey}"></div>
+                    <div class="prop-right" th:text="${goodsEntityInfo.skuInfo.specParameterValue[index.index]}"></div>
+                </div>
+                <div class="prop-oneline" th:each="performanceParameterKey,index:${goodsEntityInfo?.skuInfo?.performanceParameterKey}">
+                    <div class="prop-left" th:text="${performanceParameterKey}"></div>
+                    <div class="prop-right"  th:text="${goodsEntityInfo.skuInfo.performanceParameterValue[index.index]}"></div>
+                </div>
+            </div>
+        </div>
+        <div class="prop-close-button">
+            <div class="close-button">
+                关闭
+            </div>
+        </div>
+    </div>
+    <!-- 包装蒙层 -->
+    <div class="goods-package-fullpage">
+    </div>
+    <div class="goods-package-prop">
+        <div class="prop-title">包装</div>
+        <div class="prop-content prop-content-package">
+            <div>
+                <!--商品为器械、配件、其他-->
+                <span th:if="${goodsEntityInfo?.skuInfo?.showModel == true}">
+                    <div class="prop-oneline">
+                        <div class="prop-left">包装单位</div>
+                        <div class="prop-right" th:text="${goodsEntityInfo?.skuInfo?.baseUnitName}"></div>
+                    </div>
+                </span>
+                <!--商品为耗材、试剂时-->
+                <span th:if="${goodsEntityInfo?.skuInfo?.showModel == false}">
+                    <span th:if="${goodsEntityInfo?.skuInfo?.changeNum>0}">
+                    <div class="prop-oneline">
+                        <div class="prop-left">包装规格</div>
+                        <div class="prop-right" >
+                            <span th:text="${goodsEntityInfo?.skuInfo?.changeNum}"></span>
+                            <span th:text="${goodsEntityInfo?.skuInfo?.minUnitName}"></span>
+                            /
+                            <span th:text="${goodsEntityInfo?.skuInfo?.baseUnitName}"></span>
+                        </div>
+                    </div>
+                    </span>
+                </span>
+                <!--<div class="prop-oneline">
+                    <div class="prop-left">运输</div>
+                    <div class="prop-right">
+                        <span th:text="'长' + ${goodsEntityInfo?.skuInfo?.goodsLength}"></span>cm&nbsp;
+                        <span th:text="'宽' + ${goodsEntityInfo?.skuInfo?.goodsWidth}"></span>cm&nbsp;
+                        <span th:text="'高' + ${goodsEntityInfo?.skuInfo?.goodsHeight}"></span>cm&nbsp;
+                        <span th:text="'净重' + ${goodsEntityInfo?.skuInfo?.netWeight}"></span>kg&nbsp;
+                    </div>
+                </div>-->
+                <div class="prop-oneline" th:if="${ not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packageLength)}">
+                    <div class="prop-left">包装体积</div>
+                    <div class="prop-right">
+                        <span th:if="${goodsEntityInfo?.skuInfo?.packageLength != 0}">
+                        长度&nbsp;<span th:text="${goodsEntityInfo?.skuInfo?.packageLength}"></span>&nbsp;cm
+                        </span>
+                        <span th:if="${goodsEntityInfo?.skuInfo?.packageWidth != 0}">
+                        宽度&nbsp;<span th:text="${goodsEntityInfo?.skuInfo?.packageWidth}"></span>&nbsp;cm
+                        </span>
+                        <span th:if="${goodsEntityInfo?.skuInfo?.packageHeight != 0}">
+                        高度&nbsp;<span th:text="${goodsEntityInfo?.skuInfo?.packageHeight}"></span>&nbsp;cm
+                        </span>
+    
+                    </div>
+                </div>
+                <div class="prop-oneline" th:if="${ not #strings.isEmpty(goodsEntityInfo?.skuInfo?.grossWeight) and goodsEntityInfo?.skuInfo?.grossWeight != 0}">
+                    <div class="prop-left">毛重</div>
+                    <div class="prop-right">
+                        <span th:text="${goodsEntityInfo?.skuInfo?.grossWeight}"></span>&nbsp;kg
+                    </div>
+                </div>
+                <!--商品为器械、配件、其他-->
+                <span th:if="${goodsEntityInfo?.skuInfo?.showModel == true and not #strings.isEmpty(goodsEntityInfo?.skuInfo?.packingList)}">
+                    <div class="prop-oneline">
+                        <div class="prop-left">包装清单</div>
+                        <div class="prop-right" th:text="${goodsEntityInfo?.skuInfo?.packingList}"></div>
+                    </div>
+                </span>
+                <!--商品为耗材、试剂时-->
+                <span th:if="${goodsEntityInfo?.skuInfo?.showModel == false and not #strings.isEmpty(goodsEntityInfo?.skuInfo?.minOrder) and goodsEntityInfo?.skuInfo?.minOrder != 0}">
+                    <div class="prop-oneline">
+                        <div class="prop-left">最小起订量</div>
+                        <div class="prop-right">
+                            <span th:text="${goodsEntityInfo?.skuInfo?.minOrderInt}"></span>&nbsp;<span th:text="${goodsEntityInfo?.skuInfo?.minUnitName}"></span>
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="prop-close-button">
+            <div class="close-button">
+                关闭
+            </div>
+        </div>
+    </div>
+    <!-- 存储蒙层 -->
+    <div class="goods-storage-fullpage">
+    </div>
+    <div class="goods-storage-prop">
+        <div class="prop-title">存储</div>
+        <div class="prop-content prop-content-storage">
+            <div>
+                <div class="prop-oneline" th:unless="${#strings.isEmpty(goodsEntityInfo?.skuInfo?.storageConditionOne) and #strings.isEmpty(goodsEntityInfo?.skuInfo?.storageConditionTwo)}" >
+                    <div class="prop-left">存储条件</div>
+                    <div class="prop-right">
+                        <span th:unless="${#strings.isEmpty(goodsEntityInfo?.skuInfo?.storageConditionOne)}">
+                            <span th:if="${goodsEntityInfo?.skuInfo?.storageConditionOne} == 1">常温</span>
+                            <span th:if="${goodsEntityInfo?.skuInfo?.storageConditionOne} == 2">冷冻</span>
+                            <span th:if="${goodsEntityInfo?.skuInfo?.storageConditionOne} == 3">冷藏</span>
+                        </span>&nbsp;
+                        <span th:unless="${#strings.isEmpty(goodsEntityInfo?.skuInfo?.storageConditionTwo)}">
+                                <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.storageConditionTwo,'1')}" th:text="阴凉" ></span>&nbsp;
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.storageConditionTwo,'2')}" th:text="干燥"></span>&nbsp;
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.storageConditionTwo,'3')}" th:text="避光"></span>&nbsp;
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.storageConditionTwo,'4')}" th:text="防潮"></span>&nbsp;
+                        </span>
+                    </div>
+                </div>
+                <div class="prop-oneline" th:unless="${#strings.isEmpty(goodsEntityInfo?.skuInfo?.effectiveDays)}">
+                    <div class="prop-left">有效期</div>
+                    <div class="prop-right">
+                        <span th:text="${goodsEntityInfo?.skuInfo?.effectiveDays}"></span>
+                        <span th:if="${goodsEntityInfo?.skuInfo?.effectiveDayUnit == 1}">天</span>
+                        <span th:if="${goodsEntityInfo?.skuInfo?.effectiveDayUnit == 2}">月</span>
+                        <span th:if="${goodsEntityInfo?.skuInfo?.effectiveDayUnit == 3}">年</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="prop-close-button">
+            <div class="close-button">
+                关闭
+            </div>
+        </div>
+    </div>
+    <!-- 售后蒙层 -->
+    <div class="goods-after-sale-fullpage">
+    </div>
+    <div class="goods-after-sale-prop">
+        <div class="prop-title">售后</div>
+        <div class="prop-content prop-content-after-sale">
+            <div>
+                <div class="prop-oneline" th:unless="${#strings.isEmpty(goodsEntityInfo?.skuInfo?.afterSaleContent)}">
+                    <div class="prop-left">售后内容</div>
+                    <div class="prop-right" >
+                        <span >
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.afterSaleContent,'1')}">包安装</span>
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.afterSaleContent,'2')}">包培训</span>
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.afterSaleContent,'3')}">物流点自提</span>
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.afterSaleContent,'4')}">送货上门，含卸货上楼</span>
+                            <span th:if="${#strings.containsIgnoreCase(goodsEntityInfo?.skuInfo?.afterSaleContent,'5')}">送货上门，含卸货到楼下</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="prop-oneline" th:if="${not #strings.isEmpty(goodsEntityInfo?.skuInfo?.qaYears) }">
+                    <div class="prop-left">质保年限</div>
+                    <div class="prop-right">
+                        <span th:text="${goodsEntityInfo?.skuInfo?.qaYears}"></span>年
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="prop-close-button">
+            <div class="close-button">
+                关闭
+            </div>
+        </div>
+    </div>
+
+    <!-- 分享 -->
+    <div class="commodity-sharing">
+        <div class="sharing-cover"></div>
+        <div class="sharing-con">
+            <div class="share-to">分享至</div>
+            <div class="share-type">
+                <div class="type-show" data-app="WechatFriends">
+                    <i class="icon icon-wechat"></i>
+                    <p>微信</p>
+                </div>
+                <div class="type-show" data-app="WechatFriendship">
+                    <i class="icon icon-circle-of-friends"></i>
+                    <p>朋友圈</p>
+                </div>
+                <div class="type-show" data-app="QQ">
+                    <i class="icon icon-qq"></i>
+                    <p>QQ</p>
+                </div>
+                <div class="type-show" data-app="QZone">
+                    <i class="icon icon-qzone"></i>
+                    <p>QQ空间</p>
+                </div>
+            </div>
+            <div class="cannel">取消</div>
+        </div>
+    </div>
+    <!-- 微信分享 -->
+    <div class="weixin-share">
+        <img class="share-jiantou" th:src="@{${#httpServletRequest.getContextPath()} + '/images/goods-detail/share-jiantou.png'}" alt="">
+        <div class="share">
+            <div class="share-txt">
+                点击右上角,选择分享方式进行分享
+            </div>
+            <div>
+                点击
+                <img th:src="@{${#httpServletRequest.getContextPath()} + '/images/goods-detail/friend-chat.jpg'}" alt="">
+                发送给微信朋友或者点击
+                <img th:src="@{${#httpServletRequest.getContextPath()} + '/images/goods-detail/friend-ship.jpg'}" alt="">
+                分享到朋友圈
+            </div>
+        </div>
+    </div>
+    <!-- 联系客服 -->
+    <div class="suspension">
+        <div class="sus-cover"></div>
+        <div class="sus-con">
+            <div class="sus-contact"></div>
+            <div class="service">
+                <a href="javascript:phone('4006-999-569')" class="sus-tel">
+                    <div class="info">
+                        <p class="txt">服务热线 4006-999-569</p>
+                        <p class="des">一键呼叫，专业客服经理竭诚为您服务</p>
+                    </div>
+                    <div  class="icon icon-call"></div>
+                </a>
+                <div class="sus-customer">
+                    <div class="info">
+                        <p class="txt">在线咨询</p>
+                        <p class="des">支持文字、图片、文件，沟通更方便</p>
+                    </div>
+                    <div class="icon icon-message"></div>
+                </div>
+                <div class="cannel">取消</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 成功气泡提示 加入购物车 -->
+<div class="success-bubble J-success-bubble">
+    <div class="i-yes1">
+        <i class="hc-icon icon-yes1"></i>
+    </div>
+    <div class="success-tip">
+        加入购物车成功
+    </div>
+</div>
+<!-- 错误气泡提示 数量已达到上限 -->
+<div class="error-bubble J-error-bubble">
+    <div class="error-inner">
+        添加失败，采购单商品种类数已达到上限
+    </div>
+</div>
+</body>
+<script th:src="@{'/js/common/zepto.min.js?'+${staticTimeStamp}}"></script>
+<script th:src="@{'/js/common/fx.js?'+${staticTimeStamp}}"></script>
+<script th:src="@{'/js/common/fx_methods.js?'+${staticTimeStamp}}"></script>
+<script th:src="@{'/js/common/swiper.min.js?'+${staticTimeStamp}}"></script>
+<script src="../../../static/js/common/bscroll.min.js" th:src="'/js/common/bscroll.min.js?' +  ${staticTimeStamp}"></script>
+<script th:src="@{'/js/pages/goods-detail.js?'+${staticTimeStamp}}"></script>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script>
+    function phone(date){
+        window.location.href = 'tel:' + date;
+    }
+</script>
+</html>

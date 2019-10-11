@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<html lang="en">
+<head th:replace="common/header::common_header(~{::title},~{::link})">
+	<title>贝登精选-医疗器械B2B电商平台</title>
+	<link rel="stylesheet" th:href="@{'/css/common/swiper.min.css?'+${staticTimeStamp}}">
+	<link rel="stylesheet" th:href="'/css/index.css?' + ${staticTimeStamp}">
+</head>
+<body>
+<div th:include="common/common-js::common-js" th:remove="tag"></div>
+<input type="hidden" id="accountStatus" th:value="${accountStatus}">
+<div id="vedeng">
+	<div id="header">
+		<div class="header-show">
+			<div class="item title">
+				<h3>贝登精选</h3>
+			</div>
+			<div class="item share">
+				<i class="icon icon-share1"></i>
+			</div>
+		</div>
+	</div>
+	<div id="contanier">
+		<div class="con-search">
+			<a href="/index/search.html">
+				<div class="box">
+						<div class="J-to-search">输入商品名称、品牌查找</div>
+						<i class="icon icon-search"></i>
+				</div>
+			</a>
+		
+		</div>
+		<div class="con-nav">
+			<ul>
+				<li>
+					<i class="icon icon-crown"></i>
+					品牌严选
+				</li>
+				<li>
+					<i class="icon icon-diamond"></i>
+					型号精选
+				</li>
+				<li>
+					<i class="icon icon-network"></i>
+					全国发售
+				</li>
+				<li>
+					<i class="icon icon-price"></i>
+					质美价优
+				</li>
+			</ul>
+		</div>
+		<div class="swiper-container three-banner">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+							<a th:href="@{/dispatch.html#/consumablesspecia}">
+								<img th:src="@{/images/banner/banner5.jpg}" alt="">
+							</a>
+				</div>
+				<div class="swiper-slide">
+					<a th:href="@{/dispatch.html#/newcustomer}">
+						<img th:src="@{/images/banner/banner3.jpg}" alt="">
+					</a>
+				</div>
+				<div class="swiper-slide">
+					<a th:href="@{/dispatch.html#/treasurehunt}">
+						<img th:src="@{images/banner/banner4.jpg}" alt="">
+					</a>
+				</div>
+				<div class="swiper-slide">
+					<a th:href="@{/joinus.html}">
+						<img th:src="@{images/banner/banner2.jpg}" alt="">
+					</a>
+				</div>
+			</div>
+			<!-- 如果需要分页器 -->
+			<div class="swiper-pagination swiper-pagination-three-banner"></div>
+		</div>
+
+		<!-- 十六种分类 -->
+		<div class="swiper-container sixteen-type">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide" data-swiper-autoplay="400">
+					<ul class="first-page common-page">
+						<li th:each="floor,index:${floorCategory1}">
+							<a href="javascript:;" th:href="@{/index/list.html(categoryId=${floor.categoryOneId},category_name=${floor.categoryOneName})}">
+								<img th:src="${floor.url}" alt="" width="50" height="50">
+								<p th:text="${floor.categoryOneName}">一级分类名称</p>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="swiper-slide" data-swiper-autoplay="400">
+					<ul class="second-page common-page">
+						<li th:each="floor,index:${floorCategory2}">
+							<a href="javascript:;" th:href="@{/index/list.html(categoryId=${floor.categoryOneId},category_name=${floor.categoryOneName})}">
+								<img th:src="${floor.url}" alt="" width="50" height="50">
+								<p th:text="${floor.categoryOneName}">一级分类名称</p>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- 如果需要分页器 -->
+			<div class="swiper-pagination swiper-pagination-sixteen-type"></div>
+		</div>
+
+		<div class="con-brand">
+			<h3>大牌推荐</h3>
+			<div class="brand">
+				<ul>
+					<li th:each="brand,stat:${brandList}" th:if="${stat.index} lt 6">
+						<a href="javascript:;" th:href="@{/index/list.html(brandId=${brand.brandId},brand_name=${brand?.brandName})}">
+							<img th:src="@{'/images/brand/brand' + ${brand.brandId} +'.jpg'}" alt="">
+						</a>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+		<div class="con-thematic">
+			<div th:each="floor,stat:${floorList}" th:if="${floor.searchSkuResult != null}" class="thematic-list ele-ultrasound">
+				<h2 th:text="${floor.categoryOneName}">一级分类名称</h2>
+				<div class="tag">
+					<a th:each="cateTwo,stat2:${floor.categoryTwoList}" th:text="${cateTwo.categoryName}" th:href="@{/index/list.html(categoryId=${cateTwo.categoryId},category_name=${cateTwo.categoryName})}">二级分类名称</a>
+				</div>
+				<div class="list">
+					<ul>
+						<li th:each="product:${floor?.skuList}">
+							<a th:href="@{'/goods/' + ${product?.skuNo} + '/goods-detail.html'}">
+								<div class="show">
+									<img th:if="${product?.picUrl}" th:src="${product.picUrl}" alt="">
+									<img th:unless="${product?.picUrl}" src="/images/nopic.jpg" alt="">
+								</div>
+								<h3 th:text="${product?.skuName}">商品标题</h3>
+								<span th:if="${product?.jxMarketPrice != 0}">
+									<p class="market" th:if="${checkPriceAuth != null && checkPriceAuth == true}">市场价:</p>
+									<div class="price" th:if="${checkPriceAuth != null && checkPriceAuth == true}">
+										<p class="symbol" th:if="${checkPriceAuth != null && checkPriceAuth == true}" >￥</p>
+										<p class="int" th:if="${checkPriceAuth != null && checkPriceAuth == true}" th:text="${product?.jxMarketPrice}"></p>
+										<p></p>
+
+									</div>
+								</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer">
+		<div class="footer-index footer-item active">
+			<div class="img-wrapper">
+				<div class="img-index img-item active"></div>
+			</div>
+			<div class="name-index">首页</div>
+		</div>
+		<div class="footer-shopcart footer-item">
+			<div class="img-wrapper">
+				<div class="img-shopcart img-item">
+				</div>
+			</div>
+			<div class="name-shopcart">购物车</div>
+		</div>
+		<div class="footer-myindex footer-item">
+			<div class="img-wrapper">
+				<div class="img-myindex img-item"></div>
+			</div>
+			<div class="name-myindex">我的</div>
+		</div>
+	</div>
+	<div id="consultation">
+		<div class="consult-icon"></div>
+		<!-- <div class="consult-txt">
+			想了解商品信息或采购问题可以与我们联系，专业客服及时高效的为您服务。
+		</div> -->
+	</div>
+	<div class="suspension">
+		<div class="sus-cover"></div>
+		<div class="sus-con">
+			<div class="sus-contact"></div>
+			<div class="service">
+				<a href="javascript:phone('4006-999-569')" class="sus-tel">
+					<div class="info">
+						<p class="txt">服务热线 4006-999-569</p>
+						<p class="des">一键呼叫，专业客服经理竭诚为您服务</p>
+					</div>
+					<div  class="icon icon-call"></div>
+				</a>
+				<div id="contact_zxxj_m" class="sus-customer">
+					<div class="info">
+						<p class="txt">在线咨询</p>
+						<p class="des">支持文字、图片、文件，沟通更方便</p>
+					</div>
+					<div class="icon icon-message"></div>
+				</div>
+				<div class="cannel">取消</div>
+			</div>
+		</div>
+	</div>
+	<div class="sus-search">
+		<div class="box">
+			<input type="text" class="J-to-search" placeholder="输入商品名称、品牌查找">
+			<i class="icon icon-search"></i>
+		</div>
+	</div>
+	<div class="commodity-sharing">
+		<div class="sharing-cover"></div>
+		<div class="sharing-con">
+			<div class="share-to">分享至</div>
+			<div class="share-type">
+				<div class="type-show" data-app="WechatFriends">
+					<i class="icon icon-wechat"></i>
+					<p>微信</p>
+				</div>
+				<div class="type-show" data-app="WechatFriendship">
+					<i class="icon icon-circle-of-friends"></i>
+					<p>朋友圈</p>
+				</div>
+				<div class="type-show" data-app="QQ">
+					<i class="icon icon-qq"></i>
+					<p>QQ</p>
+				</div>
+				<div class="type-show" data-app="QZone">
+					<i class="icon icon-qzone"></i>
+					<p>QQ空间</p>
+				</div>
+			</div>
+			<div class="cannel">取消</div>
+		</div>
+	</div>
+	<div class="weixin-share">
+		<img class="share-jiantou" src="images/share-jiantou.png" alt="">
+		<div class="share">
+			<div class="share-txt">
+				点击右上角,选择分享方式进行分享
+			</div>
+			<div>
+				点击
+				<img src="images/friend-chat.jpg" alt="">
+				发送给微信朋友或者点击
+				<img src="images/friend-ship.jpg" alt="">
+				分享到朋友圈
+			</div>
+		</div>
+	</div>
+</div>
+<div class="toast">
+	<h3>哈哈</h3>
+</div>
+</body>
+</html>
+<script th:src="@{'/js/common/swiper.min.js?'+${staticTimeStamp}}"></script>
+<script th:src="'/js/index.js?' + ${staticTimeStamp}"></script>
+
+<script>
+	var _hmt = _hmt || [];
+	(function() {
+		var hm = document.createElement("script");
+		hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+		var s = document.getElementsByTagName("script")[0];
+		s.parentNode.insertBefore(hm, s);
+	})();
+</script>
+<script>
+	function phone(date){
+		window.location.href = 'tel:' + date;
+	}
+</script>
+
+
+

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<html lang="en">
+<head th:replace="common/header::common_header(~{::title},~{::link})">
+    <title>何为贝登精选</title>
+    <link rel="stylesheet" th:href="'/css/intro-page.css?' + ${staticTimeStamp}">
+</head>
+<div th:include="common/common-js::common-js" th:remove="tag"></div>
+<input type="hidden" id="accountStatus" th:value="${accountStatus}">
+<input type="hidden" id="loginAddress" th:value="@{'/login.html#/login?backurl='+${contextUrl}+'introduction.html'}" value="/login.html#/login?backurl=/joinus.html">
+<body>
+    <div id="intro-page">
+        <div class="user-leader-header">
+            <div class="user-leader-header-left">
+                <i class="hc-icon icon-app-left"></i>
+            </div>
+            <div class="user-leader-header-middle">何为贝登精选</div>
+            <div class="user-leader-header-right">
+                <i class="hc-icon icon-app-more"></i>
+            </div>
+        </div>
+        <div class="user-leader-router-fullpage"></div>
+        <div class="user-leader-router">
+            <div class="router-body">
+                <div class="router-index">
+                    <i class="hc-icon icon-home"></i>
+                    <span class="router-word">首页</span>
+                </div>
+                <div class="router-search">
+                    <i class="hc-icon icon-search"></i>
+                    <span class="router-word">搜索</span>
+                </div>
+                <div class="router-personal">
+                    <i class="hc-icon icon-user"></i>
+                    <span class="router-word">个人中心</span>
+                </div>
+            </div>
+        </div>
+        <div class="intro">
+            <img src="images/intro-page/intro-header.jpg" alt="">
+        </div>
+        <div class="intro-txt">
+            <div class="txt">
+                贝登精选是贝登集团针对经销商客户量身定制的一站式医疗器械采购神器。通过严选国内外医疗器械一线品牌厂商，进行年度签约、产品直采和集中备货，贝登精选帮助全国的经销商客户提供精细挑选、质美价优的好产品。
+            </div>
+        </div>
+        <div class="advantage">
+            <div class="title">
+                <img src="images/intro-page/advantage.png" alt="">
+            </div>
+            <div class="con">
+                <div class="box">
+                    <div class="list">
+                        <div class="imgCon">
+                            <img src="images/intro-page/nav-list1.png" alt="">
+                        </div>
+                        <div class="dec">
+                            <p>品牌严选</p>
+                            <p>严格筛选国内外医疗器械一线品牌厂商</p>
+                        </div>
+                    </div>
+                    <div class="list">
+                        <div class="imgCon">
+                            <img src="images/intro-page/nav-list2.png" alt="">
+                        </div>
+                        <div class="dec">
+                            <p>型号精选</p>
+                            <p>精挑细选核心、互补、有优势的产品型号</p>
+                        </div>
+                    </div>
+                    <div class="list">
+                        <div class="imgCon">
+                            <img src="images/intro-page/nav-list3.png" alt="">
+                        </div>
+                        <div class="dec">
+                            <p>全国发售</p>
+                            <p>全国地区统一发售，快速响应、闪电发货</p>
+                        </div>
+                    </div>
+                    <div class="list">
+                        <div class="imgCon">
+                            <img src="images/intro-page/nav-list4.png" alt="">
+                        </div>
+                        <div class="dec">
+                            <p>质美价优</p>
+                            <p>厂家直供、正品保障 ，批量备货、价格更优</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="harvest">
+            <div class="title">
+                <img src="images/intro-page/good-title.png" alt="">
+            </div>
+            <div class="con">
+                <div class="list">
+                    <div class="imgCon">
+                        <img src="images/intro-page/good-pro.png" alt="">
+                    </div>
+                    <div class="dec">
+                        <p class="type">好产品</p>
+                        <p class="line"></p>
+                        <p class="txt">精选优质品牌核心商品，厂家直供、正品保证</p>
+                    </div>
+                </div>
+                <div class="list">
+                    <div class="imgCon">
+                        <img src="images/intro-page/good-price.png" alt="">
+                    </div>
+                    <div class="dec">
+                        <p class="type">好价格</p>
+                        <p class="line"></p>
+                        <p class="txt">批量备货+减少交易环节，价格更优惠</p>
+                    </div>
+                </div>
+                <div class="list">
+                    <div class="imgCon">
+                        <img src="images/intro-page/good-ser.png" alt="">
+                    </div>
+                    <div class="dec">
+                        <p class="type">好服务</p>
+                        <p class="line"></p>
+                        <p class="txt">快速响应、现货直发、售后保证</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="userinfor">
+            <div class="user-cover"></div>
+            <div class="user">
+                <div class="user-list">
+                    <div class="user-head">
+                        <img src="images/head.png" alt="">
+                    </div>
+                    <div class="user-info">
+                        <p class="tel" th:text="${loginUser?.hiddenMobile}"></p>
+                        <p class="address" th:text="${loginUser?.companyName}"> </p>
+                    </div>
+                </div>
+                <!-- <div class="user-out">退出登录</div> -->
+            </div>
+        </div>
+        <div class="popup">
+            <div class="popup-con">
+                <div class="popup-dec">确定退出当前账号？</div>
+                <div class="popup-play">
+                    <a class="cannel">取消</a>
+                    <a class="out" href="">退出登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+            let jp_url = window.location.href
+            let jp_title = '何为贝登精选_贝登精选'
+            let jp_desc =' 我正在看何为贝登精选_贝登精选，分享给你，一起看吧。'
+            var domain = $('#domain').val();
+            var config = {
+                url: jp_url,
+                title: jp_title,
+                desc: jp_desc,
+                img: encodeURI(domain + 'images/logo.png'),
+                from: ' '
+            };
+            var share_obj = new BrowserShare('',config);
+            // 弹出跳转其他页面
+            $('.user-leader-header-right').click(function() {
+                    $('.user-leader-router').fadeIn()
+                    $('.user-leader-router-fullpage').fadeIn()
+            })
+            $('.user-leader-router-fullpage').click(function() {
+                $('.user-leader-router').fadeOut()
+                $('.user-leader-router-fullpage').fadeOut()
+            })
+            // 监听页面高度
+            $(document).scroll(function() {
+                $('.user-leader-router').fadeOut()
+                $('.user-leader-router-fullpage').fadeOut()
+            })
+            // 返回键
+            $('.user-leader-header-left').on('click',function() {
+                window.location.href = "/index.html";
+            })
+            // 点击去首页
+            $('.router-index').on('click',function() {
+                window.location.href = '/index.html'
+            })
+            // 点击去搜索
+            $('.router-search').on('click',function() {
+                window.location.href = '/index/search.html'
+            })
+    
+            var loginStatus = $('#accountStatus').val();
+            var loginAddress = $('#loginAddress').val();
+            
+            // 点击去个人中心
+            $('.router-personal').on('click',function() {
+                if (loginStatus == '1') {
+                    $('body').css('position', 'fixed');
+                    $('.user-cover').fadeIn();
+                    $('#userinfor .user').animate({
+                        top: '10px'
+                    }, 200, 'ease-out-in')
+                } else {
+                    window.location.href = loginAddress
+                }
+            })
+    
+            //点击退出登录按钮弹出提示信息
+            $('#userinfor .user-out').tap(function () {
+                $('.popup').fadeIn(300);
+                $('.user-cover').fadeOut();
+                $('#userinfor .user').animate({
+                    top: '-95px'
+                },300,'ease-in-out')
+            });
+    
+            //点击遮罩层取消按钮回归之前状态
+            $('.popup-con .cannel').tap(function () {
+                $('body').css('position', '');
+                $('.popup').fadeOut(200);
+            });
+    
+            $('#userinfor .user-cover').tap(function (){
+                $(this).fadeOut();
+                $('#userinfor .user').animate({
+                    top: '-295px'
+                },300,'ease-out-in')
+            })
+    </script>
+</body>
+</html>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+

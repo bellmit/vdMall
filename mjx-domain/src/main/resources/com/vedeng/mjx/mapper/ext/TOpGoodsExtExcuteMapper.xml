@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vedeng.mjx.mapper.ext.TOpGoodsExtExcuteMapper">
+
+    <resultMap id="BaseResultMap" type="com.vedeng.mjx.domain.TOpGoodsExt">
+        <id column="GOODS_ID" jdbcType="BIGINT" property="goodsId"/>
+        <result column="SPU_NO" jdbcType="VARCHAR" property="spuNo"/>
+        <result column="SPU_TITLE" jdbcType="VARCHAR" property="spuTitle"/>
+        <result column="IS_OP_SHOW" jdbcType="INTEGER" property="isOpShow"/>
+        <result column="OP_INSTITUTION" jdbcType="VARCHAR" property="opInstitution"/>
+        <result column="OP_SALESPOINT" jdbcType="VARCHAR" property="opSalespoint"/>
+        <result column="BRAND_ID" jdbcType="INTEGER" property="brandId"/>
+        <result column="CATEGORY_ID" jdbcType="INTEGER" property="categoryId"/>
+        <result column="STATUS" jdbcType="INTEGER" property="status"/>
+        <result column="IS_NEW" jdbcType="INTEGER" property="isNew"/>
+        <result column="IS_HOT" jdbcType="INTEGER" property="isHot"/>
+        <result column="IS_SEVEN" jdbcType="INTEGER" property="isSeven"/>
+        <result column="OP_GOODS_RESOURCE" jdbcType="VARCHAR" property="opGoodsResource"/>
+        <result column="CREATOR" jdbcType="INTEGER" property="creator"/>
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="UPDATER" jdbcType="INTEGER" property="updater"/>
+        <result column="IS_DEL" jdbcType="INTEGER" property="isDel"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.vedeng.mjx.domain.ext.TOpGoodsExtExt">
+        <result column="OP_COMPETE" jdbcType="LONGVARCHAR" property="opCompete"/>
+        <result column="OP_GOODSDATA" jdbcType="LONGVARCHAR" property="opGoodsdata"/>
+    </resultMap>
+    <!--查询销售策略的明细-->
+    <select id="queryGoodsInfo" parameterType="com.vedeng.mjx.domain.ext.TOpGoodsExtExt"
+          resultType="java.util.Map">
+        SELECT
+            SKU_ID AS goodsId,
+            IS_ON_SALE as isOnSale,
+            IS_OP_SHOW as isOpShows,
+            OP_COMPETE as opCompete,
+            SKU_NO as spuNo,
+            SKU_SUBTITLE as spuTitle,
+            OP_INSTITUTION as opInstitution,
+            OP_SALESPOINT as opSalespoint,
+            OP_GOODSDATA as opGoodsData,
+            MOD_TIME as updateTime,
+            ADD_TIME AS createTime
+        FROM
+        V_SKU
+        WHERE
+            IS_DEL = '0'
+            AND PLATFROM_ID=1
+            and SKU_NO = #{spuNo}
+    </select>
+
+    <!--查询是否新品还是热销-->
+    <select id="queryGoodsHotDataNew" parameterType="java.lang.String" resultType="com.vedeng.mjx.domain.ext.TOpGoodsExtExt">
+        SELECT
+            SKU_NO as spuNo,
+            SKU_SUBTITLE as spuTitle,
+            OP_INSTITUTION as opInstitution,
+            OP_SALESPOINT as opSalespoint,
+            OP_COMPETE as opCompete,
+            '' as opGoodsResource,
+            OP_GOODSDATA as opGoodsData,
+            IS_SEVEN as isSeven,
+            IS_NEW as isNew,
+            IS_HOT as isHot,
+            IS_CHOSEN as isChosen
+        FROM
+            V_SKU
+        WHERE
+            IS_DEL = 0
+            AND PLATFROM_ID=1
+        AND SKU_NO = #{spuNo}
+
+    </select>
+    <!--查询是否新品还是热销-->
+    <select id="querySkuNatureInfo" parameterType="map" resultType="com.vedeng.mjx.domain.SkuNatureVo">
+        SELECT
+            PLATFROM_SKU_ID as platFormSkuId,
+            SKU_ID as skuId,
+            SKU_NO as skuNo,
+            SHOW_NAME as showName,
+            SKU_NAME as skuName,
+            SKU_SUBTITLE as subTitle,
+            IS_ON_SALE as isOnSale,
+            OP_INSTITUTION as opInstitution,
+            OP_SALESPOINT as opSalespoint,
+            OP_COMPETE as opCompete,
+            OP_GOODSDATA as opGoodsData,
+            IS_SEVEN as isSeven,
+            IS_OP_SHOW as isOpShow,
+            IS_NEW as isNew,
+            IS_HOT as isHot,
+            IS_CHOSEN as isChosen,
+            BD_MARKET_PRICE as marketPrice,
+            MEMBER_PRICE as memberPrice
+        FROM
+            V_SKU
+            <where>
+                <if test="platFormId != null">
+                    AND PLATFROM_ID=#{platFormId}
+                </if>
+
+                <if test="skuNo != null and skuNo != ''">
+                    AND SKU_NO=#{skuNo}
+                </if>
+
+                <if test="delFlag != null">
+                    AND IS_DEL=#{delFlag}
+                </if>
+            </where>
+    </select>
+
+    <select id="opGoodsAttachmentList" parameterType="com.vedeng.mjx.domain.TAttachment" resultType="com.vedeng.mjx.domain.TAttachment">
+      SELECT
+        ATTACHMENT_ID as attachmentId,
+        a.DOMAIN as domain,
+        a.URI as uri,
+        a.`NAME` as name
+      FROM
+        T_ATTACHMENT a
+      WHERE
+        RELATED_ID = #{relatedId,jdbcType=BIGINT}
+        <if test="attachmentType != null">
+            AND a.ATTACHMENT_TYPE = #{attachmentType,jdbcType=INTEGER}
+        </if>
+        <if test="attachmentFunction != null">
+            AND a.ATTACHMENT_FUNCTION = #{attachmentFunction,jdbcType=INTEGER}
+        </if>
+    </select>
+    <!--查询图片集合-->
+    <select id="queryPicList" parameterType="com.vedeng.mjx.domain.ext.TOpGoodsExtExt" resultType="com.vedeng.mjx.domain.TAttachment">
+      SELECT
+        ATTACHMENT_ID as attachmentId,
+        a.DOMAIN as domain,
+        a.URI as uri,
+        a.`NAME` as name
+      FROM
+        T_ATTACHMENT a
+      WHERE
+        RELATED_ID = #{goodsId}
+        and ATTACHMENT_TYPE=400
+    </select>
+</mapper>

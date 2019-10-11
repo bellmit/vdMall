@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<html lang="en">
+<head th:replace="common/header::common_header(~{::title},~{::link})">
+    <title>加入贝登精选</title>
+    <link rel="stylesheet" th:href="@{/css/user-leader.css}">
+</head>
+<div th:include="common/common-js::common-js" th:remove="tag"></div>
+<body>
+    <!-- 跳转链接遮罩 -->
+    <div class="router-fullpage">
+        <!-- 右上角跳转选项 -->
+        <div class="user-leader-router">
+            <div class="router-body">
+                <div class="router-index">
+                    <i class="hc-icon icon-home"></i>
+                    <span class="router-word">首页</span>
+                </div>
+                <div class="router-search">
+                    <i class="hc-icon icon-search"></i>
+                    <span class="router-word">搜索</span>
+                </div>
+                <div class="router-shopcart">
+                    <i class="hc-icon icon-shopping-cart"></i>
+                    <span class="router-word">购物车</span>
+                </div>
+                <div class="router-personal" th:attr="loginStatus=#{loginStatus}"  >
+                    <i class="hc-icon icon-user"></i>
+                    <span class="router-word">个人中心</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="user-leader">
+        <!-- 头部 -->
+        <div class="user-leader-header">
+            <div class="user-leader-header-left">
+                <i class="hc-icon icon-app-left"></i>
+            </div>
+            <div class="user-leader-header-middle">加入贝登精选</div>
+            <div class="user-leader-header-right">
+                <i class="hc-icon icon-app-more"></i>
+            </div>
+        </div>
+        <div class="user-leader-title">
+            <img src="images/user-leader/title.jpg" alt="">
+        </div>
+        <div class="user-leader-content">
+            <div class="brand">
+                <div class="brand-left">
+                    <img src="images/user-leader/banner1.jpg" alt="">
+                </div>
+                <div class="brand-right">
+                    <div class="brand-right-title">品牌严选</div>
+                    <div class="brand-right-content">
+                        严格筛选国内外医疗器械一线品牌厂商
+                    </div>
+                </div>
+            </div>
+            <div class="model">
+                <div class="model-left">
+                    <img src="images/user-leader/banner2.jpg" alt="">
+                </div>
+                <div class="model-right">
+                    <div class="model-right-title">型号精选</div>
+                    <div class="model-right-content">
+                        精挑细选核心、互补、有优势的产品型号
+                    </div>
+                </div>
+            </div>
+            <div class="buy">
+                <div class="buy-left">
+                    <img src="images/user-leader/banner3.jpg" alt="">
+                </div>
+                <div class="buy-right">
+                    <div class="buy-right-title">全国发售</div>
+                    <div class="buy-right-content">
+                        全国地区统一发售，快速响应、闪电发货
+                    </div>
+                </div>
+            </div>
+            <div class="good">
+                <div class="good-left">
+                    <img src="images/user-leader/banner4.jpg" alt="">
+                </div>
+                <div class="good-right">
+                    <div class="good-right-title">质美价优</div>
+                    <div class="good-right-content">
+                        厂家直供、正品保障
+                    </div>
+                    <div class="good-right-content-line2">
+                        批量备货、价格更优
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="user-leader-apply">
+            <div class="apply-title">精挑细选 就在贝登</div>
+            <div class="apply-desc">一键获取采购神器</div>
+             <div class="apply-button">立即申请</div>
+        </div>
+    </div>
+    <div class="full-page-tip-yes">
+    </div>
+    <div class="tip-wrapper">
+        <div class="tip-top-success">您已成功加入贝登精选，可查看商品价格</div>
+        <div class="tip-top-ing">您已申请加入贝登精选，请等待系统审核</div>
+        <div class="tip-top-failed">您的账号为禁用状态，无法申请</div>
+        <div class="tip-bottom">
+            <div class="tip-know">知道了</div>
+            <a class="tip-goIndex" href="/">去首页</a>
+        </div>
+    </div>
+    <div class="tip-warning">
+        操作失败
+    </div>
+    <input type="hidden" id="loginAddress" th:value="@{'/login.html#/login?backurl='+${contextUrl}+'joinus.html'}" value="/login.html#/login?backurl=/joinus.html">
+</body>
+</html>
+
+<script th:src="'/js/pages/application.js?' + ${staticTimeStamp}"></script>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+

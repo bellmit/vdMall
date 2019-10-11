@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!-- th:fragment 定义需要引入的代码块，该div包含的内容即为引用的公共内容 -->
+<head	th:fragment="common_header(title,links)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="format-detection" content="telephone=no" />
+    <title	th:replace="${title}">贝登精选-医疗器械B2B电商平台</title>
+    <!--	Common	styles	and	scripts	-->
+    <link rel="stylesheet" type="text/css" th:href="'/css/common/base.css?' +  ${staticTimeStamp}">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <script th:src="'/js/common/zepto.min.js?' + ${staticTimeStamp}"></script>
+    <script th:src="'/js/common/touch.js?'+  ${staticTimeStamp}"></script>
+    <script th:src="'/js/common/fx.js?' + ${staticTimeStamp}"></script>
+    <script th:src="'/js/common/fx_methods.js?' + ${staticTimeStamp}"></script>
+    <script th:src="'/js/common/bannerTouch.js?'+ ${staticTimeStamp}"></script>
+    <!--/*	Per-page	placeholder	for	additional	links	*/-->
+    <th:block	th:replace="${links}"	/>
+</head>
+</html>
+
+
+
+
+
+

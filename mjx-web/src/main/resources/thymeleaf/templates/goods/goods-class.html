@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>[[${seo_title}]]</title>
+    <!-- <link rel="stylesheet" href="./css/common/base.css">
+    <link rel="stylesheet" href="./css/goods-class.css"> -->
+    <link rel="stylesheet" href="../../../static/css/common/base.css" th:href="'/css/common/base.css?' + ${staticTimeStamp}">
+    <link rel="stylesheet" href="../../../static/css/goods-class.css" th:href="'/css/goods-class.css?' + ${staticTimeStamp}">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+</head>
+<div th:include="common/common-js::common-js" th:remove="tag"></div>
+<body class="main_body">
+    <div class="goods-class">
+        <!-- 头部 -->
+        <header class="goods-class-title">
+            <div class="goods-class-title-left">
+                <i class="hc-icon icon-app-left"></i>
+            </div>
+            <div class="goods-class-title-middle" >
+                <i class="hc-icon icon-search"></i>
+                <!-- <input type="text" maxlength="20" placeholder="请输入商品名称、品牌关键字查找" th:value="${searchParameter?.keyword}" class="J-keywords place"  disabled> -->
+                <div class="placeHloder">输入商品名称、品牌查找</div>
+                <div class="i-error2">
+                    <i class="hc-icon icon-error2"></i>
+
+                </div>
+            </div>
+            <div class="goods-class-title-right">
+                <i class="hc-icon icon-filter"></i>
+            </div>
+        </header>
+        <!-- 内容 -->
+        <div class="goods-class-body">
+            <!-- 一种商品 -->
+            <a th:href="@{'/goods/' + ${skuVo.skuNo} + '/goods-detail.html'}" class="goods-class-one-kind" th:each="skuVo:${searchResult.pageInfo.list}"  p="1">
+                <div class="goods-class-one-kind-pic">
+                    <img src="../../../static/images/u116.jpg"  th:src="${skuVo.picUrl}" alt="">
+                </div>
+                <div class="goods-class-one-kind-desc">
+                    <div class="goods-class-one-kind-desc-title">
+                            <span class="word">
+                               [[${skuVo.skuName}]]
+                            </span>
+                    </div>
+                    <div class="imgbox">
+                        <div class="jx-img" th:if="${skuVo.isMjx}">
+                            <img src="../../../static/images/goods-class/sjx.png" th:src="@{/images/goods-class/sjx.png}" alt="">
+                        </div>
+                        <div class="new-img" th:if="${skuVo.isNew}">
+                            <img src="../../../static/images/goods-class/new.png" th:src="@{/images/goods-class/new.png}"  alt="">
+                        </div>
+                        <div class="hot-img" th:if="${skuVo.isHot}">
+                            <img src="../../../static/images/goods-class/hot.png" th:src="@{/images/goods-class/hot.png}" alt="">
+                        </div>
+                        <div class="seven-img" th:if="${skuVo.isSeven}">
+                            <img src="../../../static/images/goods-class/sevenNoReason.png" alt="" th:src="@{/images/goods-class/sevenNoReason.png}">
+                        </div>
+                    </div>
+
+                    <div class="goods-class-one-kind-desc-type" th:if="${skuVo.modelOrSpecValue} != null">
+                        [[${skuVo.modelOrSpecName}]]：[[${skuVo.modelOrSpecValue}]]
+                    </div>
+                    <div class="goods-class-one-kind-desc-order">
+                        订货号：[[${skuVo.skuNo}]]
+                    </div>
+                    <div class="goods-class-one-kind-desc-price" th:if="${checkPriceAuth != null && checkPriceAuth == true && skuVo.jxMarketPrice!=0}" >
+                        <span class="left">市场价：</span>
+                        <span class="right">
+                            ￥<span class="right-int" th:text="${skuVo.jxMarketPrice}">9000</span>
+                        </span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="loading-gif" style="display: none">
+            <div>
+              <img src="../../../static/images/goods-class/loading.gif" th:src="@{/images/goods-class/loading.gif}" alt="">
+                    <p class="loading_text">努力加载中...</p>
+            </div>
+               
+            
+         
+        </div>
+        <input type="hidden" class="checkPriceAuth" th:value="${checkPriceAuth}">
+        <input class="filterBrands" type="hidden" name="filter_brands" th:value="${filter_brands}" />
+        <input type="hidden"  id="historysearch" th:value="${searchParameter.keyword}">
+        <input class="categoryVal" type="hidden" name="category" th:value="${searchParameter.categoryId}">
+        <input class="categoryName" type="hidden" name="category_name" th:value="${category_name}">
+        <input class="brandVal" type="hidden" name="brand" th:value="${searchParameter.brandId}">
+        <input class="brandName" type="hidden" name="brand_name" th:value="${brand_name}">
+        <input class="filterCategory" type="hidden" name="filter_category" th:value="${filter_category}">
+        <input class="filterBrands" type="hidden" name="filter_brands" th:value="${filter_brands}">
+        <!-- 右侧蒙层弹框 筛选 -->
+        <div class="mc">
+        </div>
+        <div  class="goods-class-choice-wrapper">
+            <!-- <div class="goods-class-left"></div> -->
+            <div class="goods-class-choice">
+                    <div class="brand_loading-gif">
+                            <div>
+                                <svg version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve" width='60' height='60'>
+                                    <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                    <animateTransform 
+                                        attributeName="transform" 
+                                        attributeType="XML" 
+                                        type="rotate"
+                                        dur="1s" 
+                                        from="0 50 50"
+                                        to="360 50 50" 
+                                        repeatCount="indefinite" />
+                                </path>
+                                </svg>
+                              
+                            </div>
+                           
+                        </div>
+                <div class="choice_main">
+                    <div class="choice_main_child">
+                    <!-- 分类 -->
+                    <div th:style="${#lists.size(searchResult.filterCondition.categoryList)} eq 0 ? 'display:none': ''"  class="goods-class-choice-type goods_choice_common" >
+                        <div class="goods-class-choice-type-title">
+                            <div class="goods-class-choice-type-title-left">
+                                分类
+                            </div>
+                            <div class="goods-class-choice-type-title-right">
+                                <span class="type-selected"></span>
+                                <div class="i-up">
+                                    <i class="hc-icon icon-up"></i>
+                                </div>
+                                <div class="i-down" th:style="${#lists.size(searchResult.filterCondition.categoryList)} &lt; 7 ? 'display:none': ''">
+                                    <i class="hc-icon icon-down"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="goods-class-choice-type-body">
+
+                                <div class="goods-type-wrapper "  th:each="one:${searchResult.filterCondition.categoryList}">
+                                    <div class="goods-type" th:class="${one.categoryId == filter_category} ? 'goods-type active' : 'goods-type'" th:cate_id="${one.categoryId}">
+                                        [[${one.categoryName}]]
+                                    </div>
+                                </div>
+                                <div class="goods-type-wrapper" th:remove="all">
+                                    <div class="goods-type">
+                                        消毒耗材
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <!-- 分类/ -->
+                    <div class="brand_ChildrenList">
+
+                        <!-- 品牌 -->
+                        <div th:style="${#lists.size(searchResult.filterCondition.brandList)} eq 0 ? 'display:none': ''" class="goods-class-choice-brand goods_choice_common">
+                            <div class="goods-class-choice-brand-title goods_tite_cmoon">
+                                <div class="goods-class-choice-brand-title-left goods_tite_cmoon_left">
+                                    品牌
+                                </div>
+                                <div class="goods-class-choice-brand-title-right goods_tite_cmoon_right">
+                                    <span class="brand-selected comon_selected"></span>
+                                    <div class="i-up common_i_up">
+                                        <i class="hc-icon icon-up"></i>
+                                    </div>
+                                    <div class="i-down common_i_down" th:style="${#lists.size(searchResult.filterCondition.brandList) &lt; 7}  ? 'display:none': ''">
+                                        <i class="hc-icon icon-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="goods-class-choice-brand-body goods_body_commn">
+
+                                <div class="goods-brand-wrapper goods_wrapper_common"th:each="brand:${searchResult.filterCondition.brandList}" >
+
+                                    <div class="goods-brand goods_gezi_common" th:brandid="${brand?.brandId}" >
+                                        [[${brand?.brandName}]]
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- 品牌 /-->
+                        <!-- 科室 -->
+                        <div th:style="${searchResult.filterCondition.deptList} eq null ? 'display:none': ''"  class="goods-class-choice-Department goods_choice_common">
+                            <div class="goods-class-choice-Department-title goods_tite_cmoon">
+                                <div class="goods-class-choice-Department-title-left goods_tite_cmoon_left">
+                                    科室
+                                </div>
+                                <div class="goods-class-choice-Department-title-right goods_tite_cmoon_right">
+                                    <span class="Department-selected comon_selected"></span>
+                                    <div class="i-up common_i_up">
+                                        <i class="hc-icon icon-up"></i>
+                                    </div>
+                                    <div th:style="${ not #lists.isEmpty(searchResult.filterCondition.deptList)   and #lists.size(searchResult.filterCondition.deptList) &lt; 7}  ? 'display:none': ''" class="i-down common_i_down">
+                                        <i class="hc-icon icon-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="goods-class-choice-Department-body goods_body_commn">
+                                <div class="goods-Department-wrapper goods_wrapper_common" th:each="dept:${searchResult.filterCondition.deptList}">
+                                    <div class="goods-Department goods_gezi_common" th:Departmentid="${dept?.departmentId}">
+                                        [[${dept?.departmentName}]]
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 科室/ -->
+
+                    <!-- 属性-类型 -->
+                    <div class="attribute_box">
+
+                        <!-- 属性-类型/ -->
+                        <div th:style="${#lists.size(searchResult.filterCondition.attrList)==0 or #lists.size(attr)==0 or filter_categoryId eq null}  ? 'display:none': ''" th:each="attr:${searchResult.filterCondition.attrList}"   class="goods-class-choice-attribute goods_choice_common">
+                            <div class="goods-class-choice-attribute-title goods_tite_cmoon">
+                                <div class="goods-class-choice-attribute-title-left goods_tite_cmoon_left">
+                                    [[${attr?.attrName}]]
+                                </div>
+                                <div class="goods-class-choice-attribute-title-right goods_tite_cmoon_right">
+                                    <span class="attribute-selected comon_selected" ></span>
+                                    <div class="i-up common_i_up">
+                                        <i class="hc-icon icon-up"></i>
+                                    </div>
+                                    <div class="i-down common_i_down" th:style="${#lists.size(attr) &lt; 7} ? 'display:none': ''">
+                                        <i class="hc-icon icon-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="goods-class-choice-attribute-body goods_body_commn">
+                                <div class="goods-attribute-wrapper goods_wrapper_common"  th:each="attrvalue:${attr.valueList}">
+                                    <div class="goods-attribute goods_gezi_common" th:attrid="${attr.attrId}" th:attrvalueid="${attrvalue?.attrValueId}">
+                                        [[${attrvalue?.attrValueName}]]
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+             
+
+
+
+                    <!--属性-材质/ -->
+                    </div>
+                    </div>
+       
+                </div>
+
+                <!-- 底部 按钮 -->
+                <div class="goods-class-bottom">
+                    <div class="goods-class-reset">
+                        重置
+                    </div>
+                    <div class="goods-class-confirm">
+                        确定
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 未查找到符合条件的商品 -->
+        <div class="goods-class-none" th:style="${#lists.size(searchResult.pageInfo.list)} eq 0 ? 'display:block': 'display:none'"   >
+            <div class="i-info2">
+                <img src="../../../static/images/goods-class/u152.png" alt="" th:src="@{/images/goods-class/u152.png}" >
+            </div>
+            <div class="goods-class-none-word">
+                抱歉，没有找到符合条件的商品
+            </div>
+            <div class="back-index">
+                回到首页
+            </div>
+        </div>
+        <!--    删选结果为空时    -->
+        <div class="filter_result_none">
+            <div class="filter_result_img">
+                <img src="../../../static/images/goods-class/u152.png" alt="" th:src="@{/images/goods-class/u152.png}" >
+            </div>
+            <div class="filter_result_word">
+                抱歉，没有找到符合条件的商品
+            </div>
+            <div class="go-index">
+                回到首页
+            </div>
+        </div>
+    </div>
+    <div id="consultation">
+        <div class="consult-icon"></div>
+    </div>
+    <div class="suspension">
+        <div class="sus-cover"></div>
+        <div class="sus-con">
+            <div class="sus-contact"></div>
+            <div class="service">
+                <a href="javascript:phone('4006-999-569')"  class="sus-tel">
+                    <div class="info">
+                        <p class="txt">服务热线 4006-999-569</p>
+                        <p class="des">一键呼叫，专业客服经理竭诚为您服务</p>
+                    </div>
+                    <div class="icon icon-call">
+                    </div>
+                </a>
+                <div id="contact_zxxj_m" class="sus-customer">
+                    <div class="info">
+                        <p class="txt">在线咨询</p>
+                        <p class="des">支持文字、图片、文件，沟通更方便</p>
+                    </div>
+                    <div class="icon icon-message"></div>
+                </div>
+                <div class="cannel">取消</div>
+            </div>
+        </div>
+    </div>
+
+<input type="hidden" class="J-totalcount" th:value="${searchResult.pageInfo.size}">
+</body>
+<script src="../../../static/js/common/template-web.js"  th:src="'/js/common/template-web.js?' +  ${staticTimeStamp}"></script>
+<script src="../../../static/js/common/bscroll.min.js" th:src="'/js/common/bscroll.min.js?' +  ${staticTimeStamp}"></script>
+<script  th:src="'/js/common/fastclick.js?' +  ${staticTimeStamp}" src="../../../static/js/common/fastclick.js"></script>
+<!-- <script th:src="'/js/common/BrowserShare.js?' +  ${staticTimeStamp}"></script> -->
+<script src="../../../static/js/common/zepto.min.js" th:src="'/js/common/zepto.min.js?' +  ${staticTimeStamp}"></script>
+<script src="../../../static/js/common/fx.js" th:src="'/js/common/fx.js?'+ ${staticTimeStamp}" ></script>
+<script src="../../../static/js/common/fx_methods.js" th:src="'/js/common/fx_methods.js?' + ${staticTimeStamp}"></script>
+<script src="../../../static/js/common/getQueryString.js" th:src="'/js/common/getQueryString.js?' + ${staticTimeStamp}"></script>
+
+<script id="test" type="text/html">
+    {{each list value i }}
+    <div class="goods-class-choice-attribute goods_choice_common" data-attr={{value.attrId}}>
+            <div class="goods-class-choice-attribute-title goods_tite_cmoon">
+                <div class="goods-class-choice-attribute-title-left goods_tite_cmoon_left">
+                  {{value.attrName}}
+                </div>
+                <div class="goods-class-choice-attribute-title-right goods_tite_cmoon_right">
+                    <span class="attribute-selected comon_selected"></span>
+                    {{if value.valueList.length>=7}}
+                    <div class="i-up common_i_up" style="display: none">
+                        <i class="hc-icon icon-up"></i>
+                    </div>
+
+                    <div class="i-down common_i_down" style="display: block">
+                        <i class="hc-icon icon-down"></i>
+                     </div>
+                    {{else if value.valueList.length< 7}}
+                    <div class="i-up common_i_up" style="display: none">
+                        <i class="hc-icon icon-up"></i>
+                    </div>
+
+                    <div class="i-down common_i_down" style="display: none">
+                        <i class="hc-icon icon-down"></i>
+                     </div>
+                   {{/if}}
+                </div>
+            </div>
+
+            <div class="goods-class-choice-attribute-body goods_body_commn">
+                    {{each value.valueList }} 
+                <div class="goods-attribute-wrapper goods_wrapper_common">
+                        
+                    <div class="goods-attribute goods_gezi_common" attrvalueid={{$value.attrValueId}}>
+                      {{$value.attrValueName}}
+                    </div>
+                   
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/each}}
+</script>
+
+<script id="brandtest" type="text/html">
+     
+     {{each brandlist value i }}
+        <div class="goods-brand-wrapper goods_wrapper_common" >
+
+                <div class="goods-brand goods_gezi_common" brandid={{value.brandId}} >
+                {{value.brandName}}
+                </div>
+        </div>
+     {{/each}}
+</script>
+
+<script id="departmenttest" type="text/html">
+
+
+    {{each list value i }}
+           <div class="goods-Department-wrapper goods_wrapper_common">
+            <div class="goods-Department goods_gezi_common" Departmentid={{value.departmentId}}>
+               {{value.departmentName}}
+            </div>
+            </div>
+        {{/each}}
+
+
+
+</script>
+<script src="../../../static/js/pages/goods-class.js" th:src="'/js/pages/goods-class.js?' + ${staticTimeStamp}"></script>
+
+
+
+
+
+
+<script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <script>
+        function phone(date){
+            window.location.href = 'tel:' + date;
+        }
+    </script>
+</html>

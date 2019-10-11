@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:style="${#lists.size(searchResult.filterCondition.attrList)==0 or #lists.size(attr)==0}  ? 'display:none': ''" th:each="attr:${searchResult.filterCondition.attrList}"   class="goods-class-choice-attribute goods_choice_common">
+    <div class="goods-class-choice-attribute-title goods_tite_cmoon">
+        <div class="goods-class-choice-attribute-title-left goods_tite_cmoon_left">
+            [[${attr?.attrName}]]
+        </div>
+        <div class="goods-class-choice-attribute-title-right goods_tite_cmoon_right">
+            <span class="attribute-selected comon_selected"></span>
+            <div class="i-up common_i_up">
+                <i class="hc-icon icon-up"></i>
+            </div>
+            <div class="i-down common_i_down">
+                <i class="hc-icon icon-down"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="goods-class-choice-attribute-body goods_body_commn">
+        <div class="goods-attribute-wrapper goods_wrapper_common"  th:each="attrvalue:${attr.valueList}">
+            <div class="goods-attribute goods_gezi_common" th:attrvalueid="${attrvalue?.attrValueId}">
+                [[${attrvalue?.attrValueName}]]
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

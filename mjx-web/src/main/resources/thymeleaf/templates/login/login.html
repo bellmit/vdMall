@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>贝登精选</title>
+    <link rel="icon" th:href="${staticDomain}+'vedeng/'+${staticResourcesVersion}+'/favicon.ico'">
+    <link th:href="${staticDomain}+'vedeng/'+${staticResourcesVersion}+'/css/app.css?' + ${staticTimeStamp}" rel="stylesheet">
+</head>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var _contextUrl = [[${contextUrl}]];
+    var _mUrl = [[${mUrl}]];
+    var _appId = [[${appId}]];
+    var _openId = [[${openId}]];
+    var _accountStatus = [[${accountStatus}]];
+
+    /*]]>*/
+    var variablPath = document.createElement('variablPath');
+    // variablPath.setAttribute('src', "http://172.16.3.100:8280/");
+    variablPath.setAttribute('src', _contextUrl);
+    variablPath.setAttribute('_mUrl', _mUrl);
+    variablPath.setAttribute('appId', _appId);
+    variablPath.setAttribute('accountStatus', _accountStatus);
+    variablPath.setAttribute('openId', _openId);
+    document.head.appendChild(variablPath);
+    var _static_host = [[${staticDomain}]]+'vedeng/'+[[${staticResourcesVersion}]]+'/';
+
+</script>
+<body>
+<div id="app"></div>
+<script th:src="${staticDomain}+'vedeng/' + ${staticResourcesVersion} + '/js/chunk-vendors.js?' + ${staticTimeStamp}"></script>
+<script th:src="${staticDomain}+'vedeng/' + ${staticResourcesVersion} + '/js/app.bundle.js?' + ${staticTimeStamp} "></script>
+</body>
+</html>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>

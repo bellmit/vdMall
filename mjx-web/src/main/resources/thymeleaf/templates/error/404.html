@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>404</title>
+    <link rel="stylesheet" th:href="'/css/common/base.css?' + ${staticTimeStamp}">
+    <link rel="stylesheet" th:href="@{'/css/netError/404.css?' + ${staticTimeStamp}}">
+</head>
+<body>
+    <div class="error-wrapper">
+        <div class="error-pic">
+            <img th:src="@{/images/404.png}">
+        </div>
+        <div class="error-tip">
+            对不起，您访问的页面失联了。
+        </div>
+        <div class="error-try">
+            您可以尝试点击下方链接。
+        </div>
+        <div class="back-index">
+            回到首页
+        </div>
+    </div>
+</body>
+<script th:src="@{/js/common/zepto.min.js}"></script>
+<script>
+    // 回到首页
+    $('.back-index').click(function() {
+        window.location.href = '/index.html'
+    })
+</script>
+</html>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>

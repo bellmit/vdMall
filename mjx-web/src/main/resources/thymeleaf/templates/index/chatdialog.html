@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+<title></title>
+<script>
+  var lcurl = location.href;
+  if(/file/i.test(window.location.protocol)){
+      document.write("<div style='color:#F26E5E;font-size:15px;font-family:\"Microsoft YaHei\",Arial, \"宋体\"'>请将此文件通过ftp等方式上传到您的网站空间上！</div>");
+  }else if(/websiteid/.test(lcurl)){
+	  var getQueryParam = function (name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+          var r = window.location.search.substr(1).match(reg);
+          if (r != null)
+              return decodeURIComponent(r[2]);
+          return '';
+      };
+	  document.title = getQueryParam('originPageTitle');
+      var lcarr = lcurl.split("?");
+      var lclen = lcarr.length;
+      var p = "";
+      if(lclen >= 3){
+          p = lcarr[1] + '?' + lcarr[2];
+      }else{
+          p = '?' + lcarr[1];
+      }
+      document.write("<frameset rows=\"*\" cols=\"*\" frameborder=\"no\" border=\"0\" framespacing=\"0\">");
+      document.write("<frame src=\"//kefu2.ziyun.com.cn/vclient/chat/"+p+"\" title=\"mainFrame\" />");
+      document.write("</frameset>");
+  }else{
+      document.write("<div style='color:#F26E5E;font-size:15px;font-family:\"Microsoft YaHei\",Arial, \"宋体\"'>上传成功，请继续完成最后一步，将此页面地址填写至自定义Url设置页面！</div>");
+  }
+</script>
+</head>
+<noframes>
+<body>
+</body>
+</noframes>
+</html>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?2b50e271ad04e660f962c53ff7da75f2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>

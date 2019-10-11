@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:http="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<div th:fragment="common-js" >
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var _contextUrl = [[${contextUrl}]];
+    var _appId = [[${appId}]];
+    var _accountStatus = [[${accountStatus}]];
+    var _openId = [[${openId}]];
+    /*]]>*/
+    var variablPath = document.createElement('variablPath');
+    variablPath.setAttribute('src', _contextUrl);
+    variablPath.setAttribute('appId', _appId);
+    variablPath.setAttribute('openId', _openId);
+    variablPath.setAttribute('accountStatus', _accountStatus);
+    document.head.appendChild(variablPath);
+</script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script th:src="${contextUrl}+'/js/common/BrowserShare.js?' + ${staticTimeStamp} "></script>
+<script th:src="${contextUrl}+'/js/common/weixinGetCode.js?' + ${staticTimeStamp} "  th:if="${forceWxRedirect}"></script>
+<input type="hidden" id="domain" name="domain" th:value="${contextUrl}">
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    </div>
+
+</html>
+
+
+

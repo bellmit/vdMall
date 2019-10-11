@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vedeng.mjx.mapper.ext.TCategoryJxExtMapper">
+    <select id="queryCategoryOneList"  resultType="com.vedeng.mjx.domain.ext.TCategoryJxExt">
+        SELECT
+        V_CATEGORY_ID as categoryId,
+        CATEGORY_NAME as categoryName
+        from
+        V_CATEGORY
+        where STATUS = 1
+        AND IS_DEL = 0
+        AND PARENT_ID = 0
+--         AND V_CATEGORY_ID IN(1,2,3,4,5,6,7,8,9,10,12,13,14,15,16)
+    </select>
+    <select id="queryCategoryTwoList" parameterType="java.lang.Integer"  resultType="com.vedeng.mjx.domain.ext.TCategoryJxExt">
+        SELECT
+        V_CATEGORY_ID as categoryId,
+        CATEGORY_NAME  as categoryName
+        from
+        V_CATEGORY
+        where STATUS = 1
+        AND IS_DEL = 0
+        AND PARENT_ID = #{categoryId}
+        limit 3
+    </select>
+    <select id="queryThreeByOne" parameterType="java.lang.Integer"  resultType="com.vedeng.mjx.domain.ext.TCategoryJxExt">
+       SELECT
+            V_CATEGORY_ID AS categoryId,
+            CATEGORY_NAME AS categoryName
+        FROM
+            V_CATEGORY
+        WHERE
+            ( PARENT_ID = #{categoryId} OR PARENT_ID IN ( SELECT V_CATEGORY_ID FROM V_CATEGORY WHERE PARENT_ID = #{categoryId} ) )
+        AND STATUS = 1
+        AND IS_DEL = 0
+        AND LEVEL = 3
+    </select>
+    <select id="queryGoodsIdListByCategoryId" parameterType="java.util.List"  resultType="string">
+        select SKU_NO from V_SKU where CATEGORY_ID in
+        <foreach collection="categoryIds" item="categoryId" index="index" open="(" close=")" separator=",">
+            #{categoryId,jdbcType=INTEGER}
+        </foreach>
+        and IS_DEL = 0 and IS_ON_SALE=1 AND PLATFROM_ID=1
+    </select>
+    <select id="queryskuIdListPageByCategoryIds"   resultType="string">
+        select SKU_NO from V_SKU where CATEGORY_ID in
+        <foreach collection="requestParameter.attrIdList" item="categoryId" index="index" open="(" close=")" separator=",">
+            #{categoryId,jdbcType=INTEGER}
+        </foreach>
+        and IS_DEL = 0 and IS_ON_SALE=1 AND PLATFROM_ID=1
+    </select>
+    <select id="queryGoodsListPageByCategoryIds"  resultType="com.vedeng.mjx.domain.ext.TOpSkuExt">
+        select
+        SKU_ID skuId,
+        SKU_NO skuNo,
+        IS_NEW isNew,
+        IS_HOT isHot,
+        IS_SEVEN isSeven
+        from V_SKU where CATEGORY_ID in(
+        <foreach collection="list" item="index" separator=",">
+            #{index}
+        </foreach>
+        )
+        and IS_ON_SALE =1
+        and IS_DEL = 0
+        AND PLATFROM_ID=1
+        order by IS_NEW desc ,IS_HOT desc,SKU_NO desc
+    </select>
+    <select id="queryGoodsListPageByCategoryThree"  parameterType="java.lang.Integer"  resultType="string">
+        select
+        SKU_NO skuNo
+        from V_SKU
+        where IS_DEL=0
+        and IS_ON_SALE = 1
+        and CATEGORY_ID = #{categoryId}
+        AND PLATFROM_ID=1
+        order by IS_NEW desc ,IS_HOT desc,SKU_NO desc
+    </select>
+
+    <select id="queryAllSkuList"   resultType="com.vedeng.mjx.domain.ext.TOpSkuExt">
+        select
+        SKU_ID skuId,
+        SKU_NO skuNo,
+        IS_NEW isNew,
+        IS_HOT isHot,
+        IS_SEVEN isSeven
+        from V_SKU
+        where IS_DEL=0
+        and IS_ON_SALE = 1
+        AND PLATFROM_ID=1
+        order by IS_NEW desc,IS_HOT desc,SKU_NO desc
+    </select>
+
+    <select id="searchCategory"   resultType="com.vedeng.mjx.domain.ext.TCategoryJxExt">
+       select
+	        c.CATEGORY_ID as categoryId,
+	        c.CATEGORY_NAME as categoryName
+            from V_SKU g
+            left join T_CATEGORY_JX c
+            on  g.CATEGORY_ID = c.CATEGORY_ID
+            where g.IS_DEL=0 and g.IS_ON_SALE=1
+            <if test="searchParam.keywords != null and searchParam.keywords != '' ">
+                AND g.SKU_NAME like  concat('%',#{searchParam.keywords},'%')
+            </if>
+            <if test="searchParam.category != null and searchParam.category != 0 ">
+                AND g.CATEGORY_ID = #{searchParam.category}
+            </if>
+            <if test="searchParam.brand != null and searchParam.brand != 0 ">
+                AND g.BRAND_ID = #{searchParam.brand}
+            </if>
+
+            <if test="searchParam.filter_category != null and searchParam.filter_category != 0 ">
+                AND g.CATEGORY_ID = #{searchParam.filter_category}
+            </if>
+
+            <if test="searchParam.brandList != null and searchParam.brandList.size()> 0 ">
+            and g.BRAND_ID in
+                <foreach collection="searchParam.brandList" item="brandId" index="index" open="(" close=")" separator=",">
+                    #{brandId,jdbcType=INTEGER}
+                </foreach>
+            </if>
+
+
+            group by categoryId
+    </select>
+    <select id="searchBrands"   resultType="com.vedeng.mjx.domain.TBrandJx">
+        select
+        BRAND_ID
+        from V_SKU
+        where IS_DEL=0
+        and IS_ON_SALE=1
+        AND PLATFROM_ID=1
+        <if test="searchParam.keywords != null and searchParam.keywords != '' ">
+            AND g.SKU_NAME like  concat('%',#{searchParam.keywords},'%')
+        </if>
+        <if test="searchParam.CATEGORY_ID != null and searchParam.CATEGORY_ID != 0 ">
+            AND g.CATEGORY_ID = #{searchParam.category}
+        </if>
+        <if test="searchParam.brandId != null and searchParam.brandId != 0 ">
+            AND g.BRAND_ID = #{searchParam.brandId}
+        </if>
+
+        <if test="searchParam.filter_category != null and searchParam.filter_category != 0 ">
+            AND g.CATEGORY_ID = #{searchParam.filter_category}
+        </if>
+
+        <if test="searchParam.brandList != null and searchParam.brandList.size()> 0 ">
+            and g.BRAND_ID in
+            <foreach collection="searchParam.brandList" item="brandId" index="index" open="(" close=")" separator=",">
+                #{brandId,jdbcType=INTEGER}
+            </foreach>
+        </if>
+
+
+        group by BRAND_ID
+    </select>
+    <select id="searchGoods"   resultType="string">
+        select
+        SKU_ID skuId,
+        SKU_NO skuNo,
+        IS_NEW isNew,
+        IS_HOT isHot,
+        IS_SEVEN isSeven
+        from V_SKU where CATEGORY_ID in
+        <foreach collection="requestParameter.attrIdList" item="categoryId" index="index" open="(" close=")" separator=",">
+            #{categoryId,jdbcType=INTEGER}
+        </foreach>
+        and IS_DEL=0
+        and IS_ON_SALE = 1
+        AND PLATFROM_ID=1
+    </select>
+</mapper>
