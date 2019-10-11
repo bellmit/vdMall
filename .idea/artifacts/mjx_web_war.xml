@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="mjx-web:war">
+    <output-path>$PROJECT_DIR$/mjx-web/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>mjx-web</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="mjx.war">
+      <element id="artifact" artifact-name="mjx-web:war exploded" />
+    </root>
+  </artifact>
+</component>

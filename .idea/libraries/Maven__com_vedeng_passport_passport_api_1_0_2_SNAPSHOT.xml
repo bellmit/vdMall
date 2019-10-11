@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.vedeng.passport:passport-api:1.0.2-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/vedeng/passport/passport-api/1.0.2-SNAPSHOT/passport-api-1.0.2-20191009.082627-23.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/vedeng/passport/passport-api/1.0.2-SNAPSHOT/passport-api-1.0.2-20191009.082627-23-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/vedeng/passport/passport-api/1.0.2-SNAPSHOT/passport-api-1.0.2-20191009.082627-23-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/mjx.iml" filepath="$PROJECT_DIR$/mjx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mjx-common/mjx-common.iml" filepath="$PROJECT_DIR$/mjx-common/mjx-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mjx-domain/mjx-domain.iml" filepath="$PROJECT_DIR$/mjx-domain/mjx-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mjx-service/mjx-service.iml" filepath="$PROJECT_DIR$/mjx-service/mjx-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mjx-web/mjx-web.iml" filepath="$PROJECT_DIR$/mjx-web/mjx-web.iml" />
+    </modules>
+  </component>
+</project>
